@@ -10,7 +10,7 @@
       "require": "./dist/pdfactory.umd.cjs"
     }
   },
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "PdFactory",
   "scripts": {
     "build": "rimraf ./dist && npx rollup --config ./rollup.config.js",
