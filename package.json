@@ -7,8 +7,7 @@
   "main": "./dist/pdfactory.umd.cjs",
   "exports": {
     ".": {
-      "require": "./dist/pdfactory.umd.cjs",
-      
+      "require": "./dist/pdfactory.umd.cjs"
     }
   },
   "version": "0.0.0",
