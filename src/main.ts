@@ -1,6 +1,11 @@
 import { templateFunctions } from "./templateFunctions"
-import puppeteer, { Browser, PDFOptions } from 'puppeteer'
+import puppeteer, { Browser, PDFOptions } from 'puppeteer-core'
 import merge from 'lodash.merge'
+const { BrowserFetcher } = require('puppeteer-core/lib/cjs/puppeteer/node/BrowserFetcher.js');
+
+const createBrowserFetcher = (options: any) => {
+    return new BrowserFetcher('', options);
+};
 
 const LastConnection500ms = "networkidle0";
 
@@ -61,10 +66,18 @@ const pdfOptions: PDFOptions = {
 }
 
 const initialise = async (additionalConfig?: Config) => {
+  const browserFetcher = createBrowserFetcher({});
+  const revisionInfo = await browserFetcher.download('1045629');
+
+  if(!revisionInfo?.executablePath) {
+    throw new Error('Could not find executable path for browser revision');
+  }
+
   const browser = await puppeteer.launch({
     headless: true,
-    executablePath: process.env.CHROMIUM_PATH,
+    executablePath: revisionInfo.executablePath,
     args: ["--no-sandbox"],
+    ignoreDefaultArgs: ['--disable-extensions'],
   })
 
   const config = merge(defaultConfig, additionalConfig)

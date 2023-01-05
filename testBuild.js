@@ -1,6 +1,8 @@
-const pdfactory = require('./dist/pdfactory.umd.cjs')
+import initialise  from './dist/pdfactory.umd.cjs'
+import path from 'path'
 
 (async () => {
-    const pdf = await pdfactory()
+    const render = await initialise({templatesDir: [path.join(path.resolve(), 'src', 'templates')]})
+    const pdf = await render({document: "test", data: {allo: 'allo'}})
     console.log(pdf)
-})
+})()
