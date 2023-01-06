@@ -1,10 +1,9 @@
 import fs from "fs";
 import ejs from "ejs";
 import path, { ParsedPath } from "path";
-import { readFile } from "./utils.js";
-import { Config } from "./types.js"
+import { readFile } from "./utils";
 
-import { TemplateFunctions } from "./types.js";
+import { TemplateFunctions, Config } from "./types";
 
 const renderFunctionFromFile = (config: Config, filePath: string): TemplateFunctions => {
   const parsedPath: ParsedPath = path.parse(filePath);

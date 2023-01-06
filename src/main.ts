@@ -3,7 +3,7 @@ import merge from "lodash.merge";
 
 import { templateFunctions } from "./templateFunctions.js";
 
-import { Config, TemplateFunctions, PdfRequest } from "./types.js";
+import { Config, TemplateFunctions, PdfRequest } from "./types";
 
 const LastConnection500ms = "networkidle0";
 
