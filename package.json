@@ -6,7 +6,7 @@
   "files": [
     "dist"
   ],
-  "types": "./types/types.d.ts",
+  "types": "./dist/types.d.ts",
   "main": "./dist/pdfactory.umd.cjs",
   "exports": {
     ".": {
