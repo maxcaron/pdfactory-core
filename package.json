@@ -10,7 +10,7 @@
       "require": "./dist/pdfactory.umd.cjs"
     }
   },
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "PdFactory",
   "scripts": {
     "build": "npx rollup --config ./config/rollup.config.js",
