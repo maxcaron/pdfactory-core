@@ -1,15 +1,18 @@
-import { templateFunctions } from "./templateFunctions"
-import puppeteer, { Browser, PDFOptions } from 'puppeteer-core'
-import merge from 'lodash.merge'
-const { BrowserFetcher } = require('puppeteer-core/lib/cjs/puppeteer/node/BrowserFetcher.js');
+import puppeteer, { Browser, PDFOptions } from "puppeteer";
+import merge from "lodash.merge";
 
-const createBrowserFetcher = (options: any) => {
-    return new BrowserFetcher('', options);
-};
+import { templateFunctions } from "./templateFunctions.js";
+
+
+import { Config, TemplateFunctions } from "./types.js";
 
 const LastConnection500ms = "networkidle0";
 
-const generateWithBrowser = async (browser: Browser, renderedHtml: string, pdfOptions: PDFOptions): Promise<Buffer> => {
+const generateWithBrowser = async (
+  browser: Browser,
+  renderedHtml: string,
+  pdfOptions: PDFOptions
+): Promise<Buffer> => {
   const page = await browser.newPage();
   await page.setContent(renderedHtml, { waitUntil: LastConnection500ms });
 
@@ -20,32 +23,18 @@ const generateWithBrowser = async (browser: Browser, renderedHtml: string, pdfOp
   return pdf;
 };
 
-export interface TemplateFunctions {
-  [document: string]: ejs.TemplateFunction;
-}
-
-
-export interface Config {
-  partialsDir: string[];
-  partialsFile: string[];
-  templatesDir: string[];
-  templatesFile: string[];
-  ejsOptions: ejs.Options;
-}
-
 const defaultEjsOptions: ejs.Options = {
   root: "src",
-  views: ["src/templates"] // For relative paths
+  views: ["src/templates"], // For relative paths
 };
-
 
 const defaultConfig: Config = {
   partialsDir: ["./partials"],
   partialsFile: [],
   templatesDir: ["./templates"],
   templatesFile: [],
-  ejsOptions: defaultEjsOptions
-}
+  ejsOptions: defaultEjsOptions,
+};
 
 export interface PdfRequest {
   document: string;
@@ -63,26 +52,25 @@ const pdfOptions: PDFOptions = {
     left: "40px",
     right: "40px",
   },
-}
+};
 
 const initialise = async (additionalConfig?: Config) => {
-  const browserFetcher = createBrowserFetcher({});
-  const revisionInfo = await browserFetcher.download('1045629');
+  let browser : Browser | null = null;
 
-  if(!revisionInfo?.executablePath) {
-    throw new Error('Could not find executable path for browser revision');
+  try {
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      ignoreDefaultArgs: ["--disable-extensions"],
+    });
+  } catch (e) {
+    console.log(e);
+    process.exit(1); 
   }
 
-  const browser = await puppeteer.launch({
-    headless: true,
-    executablePath: revisionInfo.executablePath,
-    args: ["--no-sandbox"],
-    ignoreDefaultArgs: ['--disable-extensions'],
-  })
+  const config = merge(defaultConfig, additionalConfig);
 
-  const config = merge(defaultConfig, additionalConfig)
-
-  return async ({document, data}: PdfRequest) => {
+  return async ({ document, data }: PdfRequest) => {
     // compile documents given config
     const functions: TemplateFunctions = templateFunctions(config);
 
@@ -90,10 +78,14 @@ const initialise = async (additionalConfig?: Config) => {
     const renderedHtml: string = functions[document](data);
 
     // compile pdf
-    const pdf: Buffer = await generateWithBrowser(browser, renderedHtml, pdfOptions);
+    const pdf: Buffer = await generateWithBrowser(
+      browser as Browser,
+      renderedHtml,
+      pdfOptions
+    );
 
-    return pdf
-  }
-} 
+    return pdf;
+  };
+};
 
-export default initialise
+export default initialise;

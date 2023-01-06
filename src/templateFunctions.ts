@@ -1,18 +1,10 @@
 import fs from "fs";
 import ejs from "ejs";
 import path, { ParsedPath } from "path";
-const { fileURLToPath } = require('node:url')
-const { dirname } = require('node:path')
+import { readFile } from "./utils.js";
+import { Config } from "./types.js"
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
-import { readFile } from "./utils";
-import { Config } from "./main";
-
-interface TemplateFunctions {
-  [document: string]: ejs.TemplateFunction;
-}
+import { TemplateFunctions } from "./types.js";
 
 const renderFunctionFromFile = (config: Config, filePath: string): TemplateFunctions => {
   const parsedPath: ParsedPath = path.parse(filePath);
@@ -36,10 +28,10 @@ const renderFunctionsFromDirectories = (config: Config, templatesDir: string[]):
   return templatesDir.reduce<TemplateFunctions>((templateFunctions: TemplateFunctions, directory: string) => {
     let newTemplateFunctions: TemplateFunctions = {}
 
-    const files = fs.readdirSync(path.resolve(__dirname, directory));
+    const files = fs.readdirSync(path.resolve(directory));
 
     files.forEach(file => { 
-      const renderFunction: TemplateFunctions = renderFunctionFromFile(config, path.resolve(__dirname, directory, file))
+      const renderFunction: TemplateFunctions = renderFunctionFromFile(config, path.resolve(directory, file))
 
       newTemplateFunctions = {...newTemplateFunctions, ...renderFunction}
     })

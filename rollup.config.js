@@ -1,24 +1,44 @@
-import { nodeResolve } from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
-import typescript from '@rollup/plugin-typescript';
-import json from '@rollup/plugin-json';
+import dotenv from ".config/dotenv";
+import tsconfig from "./config/tsconfig-production.json" assert { type: "json" };
 
-const devMode = (process.env.NODE_ENV === 'development');
+import pkg from "./package.json" assert { type: "json" };
 
-export default [{
-  input: './src/main.ts',
-  output: {
+dotenv.config();
+
+import eslint from "@rollup/plugin-eslint";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import typescript from "@rollup/plugin-typescript";
+import terser from "@rollup/plugin-terser";
+import json from "@rollup/plugin-json";
+
+const devMode = process.env.NODE_ENV === "development";
+
+export default [
+  {
+    input: "./src/main.ts",
+    output: {
       file: `dist/pdfactory.umd.cjs`,
-      format: 'cjs',
-      exports: 'default',
+      format: "cjs",
+      exports: "default",
       inlineDynamicImports: true,
+    },
+    external: Object.keys(pkg.dependencies),
+    plugins: [
+      eslint({
+        fix: true,
+        exclude: [
+          "./node_modules",
+          "node_modules/**/*",
+          "dist/**/*",
+          "build/**/*",
+        ],
+      }),
+      typescript(tsconfig),
+      nodeResolve({ preferBuiltins: true }),
+      commonjs(),
+      json(),
+      ...(!devMode ? [terser()] : []),
+    ],
   },
-  plugins: [
-    typescript({
-      sourceMap: devMode,
-    }),
-    // nodeResolve({preferBuiltins: true}),
-    commonjs(),
-    json()
-  ]
-}]
+];
