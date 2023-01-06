@@ -3,7 +3,7 @@ import merge from "lodash.merge";
 
 import { templateFunctions } from "./templateFunctions.js";
 
-import { Config, TemplateFunctions } from "./types.js";
+import { Config, TemplateFunctions, PdfRequest } from "./types.js";
 
 const LastConnection500ms = "networkidle0";
 
@@ -34,11 +34,6 @@ const defaultConfig: Config = {
   templatesFile: [],
   ejsOptions: defaultEjsOptions,
 };
-
-export interface PdfRequest {
-  document: string;
-  data: object;
-}
 
 const pdfOptions: PDFOptions = {
   format: "letter",
