@@ -20,7 +20,7 @@
     "moduleResolution": "Node",
 
     "strict": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,

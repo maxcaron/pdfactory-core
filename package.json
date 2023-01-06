@@ -1,19 +1,21 @@
 {
+  "author": "PdFactory",
   "name": "pdfactory",
+  "version": "0.0.3",
   "type": "module",
   "files": [
     "dist"
   ],
+  "types": "./types/types.d.ts",
   "main": "./dist/pdfactory.umd.cjs",
   "exports": {
     ".": {
+      "types": "./dist/types.d.ts",
       "require": "./dist/pdfactory.umd.cjs"
     }
   },
-  "version": "0.0.2",
-  "author": "PdFactory",
   "scripts": {
-    "build": "npx rollup --config ./config/rollup.config.js",
+    "build": "rimraf ./dist && npx rollup --config ./config/rollup.config.js",
     "dev": "nodemon --watch build --watch src --watch test -e js,ts,json,ejs,css,html ./test/dev.js",
     "dev:watch": "concurrently \"yarn clean-build\" \"yarn typescript:watch\" \"wait-on ./build/main.js && yarn dev\"",
     "clean-build": "rimraf ./build",
