@@ -1,11 +1,16 @@
 {
-  "sourceMap": false,
+  "include": [
+    "../src/**/*"
+  ],
   "exclude": [
-    "node_modules/**/*",
-    "dist/**/*",
-    "build/**/*"
+    "../node_modules/**/*",
+    "../dist/**/*",
+    "../build/**/*"
   ],
   "compilerOptions": {
+    "rootDir": "../src",
+    "outDir": "../dist",
+
     "target": "ESNext",
     "module": "ESNext",
     "lib": [
@@ -13,6 +18,7 @@
       "DOM"
     ],
     "moduleResolution": "Node",
+
     "strict": true,
     "sourceMap": false,
     "resolveJsonModule": true,
@@ -24,6 +30,7 @@
     "noImplicitReturns": true,
     "skipLibCheck": true,
     "useDefineForClassFields": true,
+    "allowSyntheticDefaultImports": true,
     "declaration": true
   }
 }

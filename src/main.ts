@@ -3,7 +3,6 @@ import merge from "lodash.merge";
 
 import { templateFunctions } from "./templateFunctions.js";
 
-
 import { Config, TemplateFunctions } from "./types.js";
 
 const LastConnection500ms = "networkidle0";

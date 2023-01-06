@@ -1,16 +1,18 @@
-import dotenv from ".config/dotenv";
-import tsconfig from "./config/tsconfig-production.json" assert { type: "json" };
+import pkg from "../package.json" assert { type: "json" };
+import * as url from "url";
 
-import pkg from "./package.json" assert { type: "json" };
+dotenv.config({ path: "./.env" });
 
-dotenv.config();
-
+import path from "path";
+import dotenv from "dotenv";
 import eslint from "@rollup/plugin-eslint";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
 import terser from "@rollup/plugin-terser";
 import json from "@rollup/plugin-json";
+
+const dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 const devMode = process.env.NODE_ENV === "development";
 
@@ -25,6 +27,8 @@ export default [
     },
     external: Object.keys(pkg.dependencies),
     plugins: [
+      nodeResolve({ preferBuiltins: true, rootDir: path.join(dirname, "..") }),
+      typescript({ tsconfig: path.join(dirname, "./tsconfig-production.json") }),
       eslint({
         fix: true,
         exclude: [
@@ -34,8 +38,6 @@ export default [
           "build/**/*",
         ],
       }),
-      typescript(tsconfig),
-      nodeResolve({ preferBuiltins: true }),
       commonjs(),
       json(),
       ...(!devMode ? [terser()] : []),
