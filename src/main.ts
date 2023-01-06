@@ -1,9 +1,8 @@
 import puppeteer, { Browser, PDFOptions } from "puppeteer";
 import merge from "lodash.merge";
 
-import { templateFunctions } from "./templateFunctions.js";
-
-import { Config, TemplateFunctions, PdfRequest } from "./types";
+import { compileRenderingFunctions } from "./compileRenderingFunctions.js";
+import { Config, TemplateFunctions, PdfRequest } from "./types.js";
 
 const LastConnection500ms = "networkidle0";
 
@@ -28,10 +27,7 @@ const defaultEjsOptions: ejs.Options = {
 };
 
 const defaultConfig: Config = {
-  partialsDir: ["./partials"],
-  partialsFile: [],
-  templatesDir: ["./templates"],
-  templatesFile: [],
+  templatesDir: [],
   ejsOptions: defaultEjsOptions,
 };
 
@@ -62,14 +58,19 @@ const initialise = async (additionalConfig?: Config) => {
     process.exit(1); 
   }
 
-  const config = merge(defaultConfig, additionalConfig);
+  const config: Config = merge(defaultConfig, additionalConfig);
+
+  const renderingFunctions: TemplateFunctions = compileRenderingFunctions(config);
 
   return async ({ document, data }: PdfRequest) => {
-    // compile documents given config
-    const functions: TemplateFunctions = templateFunctions(config);
-
     // render html document string
-    const renderedHtml: string = functions[document](data);
+    const renderFunction: ejs.TemplateFunction = renderingFunctions[document]
+
+    if (!renderFunction) {
+      throw new Error(`Document ${document} not found`);
+    }
+
+    const renderedHtml = renderFunction(data);
 
     // compile pdf
     const pdf: Buffer = await generateWithBrowser(

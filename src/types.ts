@@ -1,8 +1,5 @@
 export interface Config {
-  partialsDir: string[];
-  partialsFile: string[];
   templatesDir: string[];
-  templatesFile: string[];
   ejsOptions: ejs.Options;
 }
 

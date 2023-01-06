@@ -1,7 +1,7 @@
 {
   "author": "PdFactory",
   "name": "pdfactory",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "type": "module",
   "files": [
     "dist"
@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build": "rimraf ./dist && npx rollup --config ./config/rollup.config.js",
-    "dev": "nodemon --watch build --watch src --watch test -e js,ts,json,ejs,css,html ./test/dev.js",
+    "dev": "nodemon --watch build --watch src --watch test -e js,ts,json,ejs,css,html --inspect ./test/dev.js",
     "dev:watch": "concurrently \"yarn clean-build\" \"yarn typescript:watch\" \"wait-on ./build/main.js && yarn dev\"",
     "clean-build": "rimraf ./build",
     "typescript:watch": "npx tsc -build config/tsconfig-local.json -w",
@@ -25,7 +25,6 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^23.0.0",
     "@rollup/plugin-eslint": "^9.0.1",
-    "@rollup/plugin-json": "^5.0.0",
     "@rollup/plugin-node-resolve": "^15.0.0",
     "@rollup/plugin-terser": "^0.2.1",
     "@rollup/plugin-typescript": "^11.0.0",
@@ -45,10 +44,10 @@
     "wait-on": "^7.0.1"
   },
   "dependencies": {
+    "@types/ejs": "^3.1.1",
     "ejs": "^3.1.8",
     "lodash.merge": "^4.6.2",
-    "puppeteer": "19.4.1",
-    "@types/ejs": "^3.1.1"
+    "puppeteer": "19.4.1"
   },
   "engines": {
     "node": "16.18.0"
