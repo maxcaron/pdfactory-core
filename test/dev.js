@@ -15,6 +15,9 @@ const DEFAULT_CONFIG = {
   },
 };
 
+let received = 0
+let sent = 0
+
 const init = async () => {
   console.log("Server starting");
   const pdfactoryHandler = await initialise(DEFAULT_CONFIG);
@@ -27,7 +30,7 @@ const init = async () => {
 
   const requestHandler = async (req, res) => {
     let pdf = null;
-    console.log('Request received');
+    received = received + 1
     
     try {
       pdf = await pdfactoryHandler(req.body);
@@ -40,10 +43,11 @@ const init = async () => {
       "Content-Type": "application/pdf",
       "Content-Length": pdf.length,
     });
-    
+    sent = sent + 1
     res.send(pdf);
     
-    console.log('PDF Sent');
+    console.table({received, sent, length: pdf.length}, )
+    
   };
 
   app.post("/", requestHandler);
