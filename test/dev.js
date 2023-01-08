@@ -2,6 +2,7 @@ import express from "express";
 import initialise from "../build/main.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import monitor from 'express-status-monitor'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const templatesDir = path.join(dirname, "../src", "templates");
@@ -20,11 +21,14 @@ const init = async () => {
 
   const app = express();
 
+  app.use(monitor());
+
   app.use(express.json());
 
   const requestHandler = async (req, res) => {
     let pdf = null;
-
+    console.log('Request received');
+    
     try {
       pdf = await pdfactoryHandler(req.body);
     } catch (e) {
@@ -36,8 +40,10 @@ const init = async () => {
       "Content-Type": "application/pdf",
       "Content-Length": pdf.length,
     });
-
+    
     res.send(pdf);
+    
+    console.log('PDF Sent');
   };
 
   app.post("/", requestHandler);
