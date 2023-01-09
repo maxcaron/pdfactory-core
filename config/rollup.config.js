@@ -1,7 +1,9 @@
 import pkg from "../package.json" assert { type: "json" };
 import * as url from "url";
 
-dotenv.config({ path: "./.env" });
+dotenv.config({
+  path: process.cwd() + `/config/.env.${process.env.DEV ? "dev" : "procution"}`,
+});
 
 import path from "path";
 import dotenv from "dotenv";
@@ -10,6 +12,7 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
 import terser from "@rollup/plugin-terser";
+import del from "rollup-plugin-delete";
 
 const dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
@@ -18,16 +21,44 @@ const devMode = process.env.NODE_ENV === "development";
 export default [
   {
     input: "./src/index.ts",
-    output: {
-      file: `dist/pdfactory.umd.cjs`,
-      format: "cjs",
-      exports: "default",
-      inlineDynamicImports: true,
+    watch: {
+      include: ["./src/**/*", "./test/**/*"],
     },
+    output: [
+      ...(!devMode
+        ? [
+            {
+              file: `dist/pdfactory.umd.cjs`,
+              format: "cjs",
+              exports: "default",
+              inlineDynamicImports: true,
+            },
+          ]
+        : []),
+      ...(devMode
+        ? [
+            {
+              file: "build/bundle.js",
+              format: "es",
+              sourcemap: true,
+              plugins: [],
+            },
+          ]
+        : []),
+    ],
     external: Object.keys(pkg.dependencies),
     plugins: [
+      del({
+        targets: [
+          ...(devMode ? ["dist/**/*"] : []),
+          ...(devMode ? ["build/**/*"] : []),
+        ],
+      }),
+      ...(!devMode ? [terser()] : []),
       nodeResolve({ preferBuiltins: true, rootDir: path.join(dirname, "..") }),
-      typescript({ tsconfig: path.join(dirname, "./tsconfig-production.json") }),
+      typescript({
+        tsconfig: path.join(dirname, "./tsconfig-local.json"),
+      }),
       eslint({
         fix: true,
         exclude: [
@@ -38,7 +69,6 @@ export default [
         ],
       }),
       commonjs(),
-      ...(!devMode ? [terser()] : []),
     ],
   },
 ];

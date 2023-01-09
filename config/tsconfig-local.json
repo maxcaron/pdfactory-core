@@ -1,6 +1,7 @@
 {
   "include": [
-    "../src/**/*"
+    "../src/**/*",
+    "../test/dev.js"
   ],
   "exclude": [
     "../node_modules",
@@ -19,7 +20,7 @@
     "moduleResolution": "Node16",
 
     "useDefineForClassFields": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": false,

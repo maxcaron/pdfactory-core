@@ -1,5 +1,5 @@
 import express from "express";
-import initialise from "../build/main.js";
+import initialise from "../build/bundle.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import monitor from 'express-status-monitor'
@@ -52,7 +52,7 @@ const init = async () => {
 
   app.post("/", requestHandler);
 
-  app.listen(3000);
+  app.listen(3001);
 
   return app;
 };

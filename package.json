@@ -15,11 +15,9 @@
     }
   },
   "scripts": {
-    "build": "rimraf ./dist && npx rollup --config ./config/rollup.config.js",
-    "dev": "nodemon --watch build --watch src --watch test -e js,ts,json,ejs,css,html --inspect ./test/dev.js",
-    "dev:watch": "concurrently \"yarn clean-build\" \"yarn typescript:watch\" \"wait-on ./build/main.js && yarn dev\"",
-    "clean-build": "rimraf ./build",
-    "typescript:watch": "npx tsc -build config/tsconfig-local.json -w",
+    "dist": "rimraf ./dist && npx rollup --config ./config/rollup.config.js",
+    "dev": "DEV=true concurrently \"yarn dev:watch\" \"wait-on ./build/bundle.js && nodemon --inspect --watch build ./test/dev.js\"",
+    "dev:watch": "rimraf ./dist && npx rollup --config ./config/rollup.config.js --watch",
     "test-build": "node ./test/testBuild.js"
   },
   "devDependencies": {
@@ -41,6 +39,8 @@
     "nodemon": "^2.0.20",
     "rimraf": "^3.0.2",
     "rollup": "^3.1.0",
+    "rollup-plugin-delete": "^2.0.0",
+    "rollup-plugin-sourcemaps": "^0.6.3",
     "typescript": "^4.9.4",
     "wait-on": "^7.0.1"
   },

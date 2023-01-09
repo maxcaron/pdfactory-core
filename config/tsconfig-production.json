@@ -10,6 +10,7 @@
   "compilerOptions": {
     "rootDir": "../src",
     "outDir": "../dist",
+    "sourceRoot": "../src",
 
     "target": "ESNext",
     "module": "ESNext",

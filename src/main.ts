@@ -63,7 +63,6 @@ const initialise = async (additionalConfig?: Config) => {
   const renderingFunctions: TemplateFunctions = compileRenderingFunctions(config);
 
   return async ({ document, data }: PdfRequest) => {
-    // render html document string
     const renderFunction: ejs.TemplateFunction = renderingFunctions[document]
 
     if (!renderFunction) {
@@ -72,7 +71,6 @@ const initialise = async (additionalConfig?: Config) => {
 
     const renderedHtml = renderFunction(data);
 
-    // compile pdf
     const pdf: Buffer = await generateWithBrowser(
       browser as Browser,
       renderedHtml,
