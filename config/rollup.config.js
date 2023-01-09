@@ -20,7 +20,7 @@ const devMode = process.env.NODE_ENV === "development";
 
 export default [
   {
-    input: "./src/index.ts",
+    input: "./src/main.ts",
     watch: {
       include: ["./src/**/*", "./test/**/*"],
     },

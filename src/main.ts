@@ -2,7 +2,12 @@ import puppeteer, { Browser, PDFOptions } from "puppeteer";
 import merge from "lodash.merge";
 
 import { compileRenderingFunctions } from "./compileRenderingFunctions.js";
-import { Config, TemplateFunctions, PdfRequest } from "./types.js";
+import { Config, PdfRequest, Initialise } from "./types.js";
+
+interface TemplateFunctions {
+  [document: string]: ejs.TemplateFunction;
+}
+
 
 const LastConnection500ms = "networkidle0";
 
@@ -44,7 +49,7 @@ const pdfOptions: PDFOptions = {
   },
 };
 
-const initialise = async (additionalConfig?: Config) => {
+const initialise: Initialise = async (additionalConfig?: Config) => {
   let browser : Browser | null = null;
 
   try {

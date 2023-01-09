@@ -1,4 +1,3 @@
-/// <reference types="node" />
-import { Config, PdfRequest } from "./types.js";
-declare const initialise: (additionalConfig?: Config) => Promise<({ document, data }: PdfRequest) => Promise<Buffer>>;
+import { Initialise } from "./types.js";
+declare const initialise: Initialise;
 export default initialise;

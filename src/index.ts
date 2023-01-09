@@ -1,4 +1,3 @@
-import './types.js';
-import main from './main.js';
+import { Initialise, Config, PdfRequest } from "./types.js";
 
-export default main
+export type { Initialise, Config, PdfRequest }
