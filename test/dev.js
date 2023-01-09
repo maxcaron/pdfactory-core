@@ -51,7 +51,7 @@ const init = async () => {
 
   app.post("/", requestHandler);
 
-  app.listen(3001);
+  app.listen(3000);
 
   return app;
 };

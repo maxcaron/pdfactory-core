@@ -7,9 +7,6 @@ dotenv.config({
 
 import path from "path";
 import dotenv from "dotenv";
-import eslint from "@rollup/plugin-eslint";
-import { nodeResolve } from "@rollup/plugin-node-resolve";
-import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
 import terser from "@rollup/plugin-terser";
 import del from "rollup-plugin-delete";
@@ -53,20 +50,9 @@ export default [
         ],
       }),
       ...(!devMode ? [terser()] : []),
-      nodeResolve({ preferBuiltins: true, rootDir: path.join(dirname, "..") }),
       typescript({
         tsconfig: path.join(dirname, `./tsconfig-${devMode ? 'dev' : 'production'}.json`),
-      }),
-      eslint({
-        fix: true,
-        exclude: [
-          "./node_modules",
-          "node_modules/**/*",
-          "dist/**/*",
-          "build/**/*",
-        ],
-        include: ["../src/**/*", "../test/**/*"]
-      }),
+      })
     ],
   },
 ];
