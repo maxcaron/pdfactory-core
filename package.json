@@ -1,7 +1,7 @@
 {
   "author": "PdFactory",
   "name": "pdfactory",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "type": "module",
   "files": [
     "dist"
@@ -18,8 +18,7 @@
     "dist": "rimraf ./dist && npx rollup --config ./config/rollup.config.js",
     "dev": "DEV=true concurrently \"yarn dev:watch\" \"wait-on ./build/bundle.js && nodemon --inspect --watch build ./test/dev.js\"",
     "dev:watch": "rimraf ./dist && npx rollup --config ./config/rollup.config.js --watch",
-    "test-build": "node ./test/testBuild.js",
-    "publish": "yarn dist && npm publish"
+    "test-build": "node ./test/testBuild.js"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^23.0.0",
