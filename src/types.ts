@@ -9,3 +9,7 @@ export interface PdfRequest {
   document: string;
   data: object;
 }
+
+export interface TemplateFunctions {
+  [document: string]: ejs.TemplateFunction;
+}
