@@ -1,10 +1,12 @@
 {
   "author": "PdFactory",
   "name": "pdfactory",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "type": "module",
   "files": [
-    "dist"
+    "dist/pdfactory.d.ts",
+    "dist/pdfactory.umd.cjs",
+    "dist/types.d.ts"
   ],
   "types": "./dist/pdfactory.d.ts",
   "main": "./dist/pdfactory.umd.cjs",
@@ -17,7 +19,7 @@
   "scripts": {
     "dist": "rimraf ./dist && npx rollup --config ./config/rollup.config.js",
     "dev": "DEV=true concurrently \"yarn dev:watch\" \"wait-on ./build/bundle.js && nodemon --inspect --watch build ./test/dev.js\"",
-    "dev:watch": "rimraf ./dist && npx rollup --config ./config/rollup.config.js --watch",
+    "dev:watch": "rimraf ./build && npx rollup --config ./config/rollup.config.js --watch",
     "test-build": "node ./test/testBuild.js"
   },
   "devDependencies": {
