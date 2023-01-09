@@ -1,9 +1,9 @@
 import fs from "fs";
 import ejs from "ejs";
 import path, { ParsedPath } from "path";
-import { readFile } from "./utils.js";
+import { readFile } from "./utils";
 
-import { TemplateFunctions, Config } from "./types.js";
+import { TemplateFunctions, Config } from "./types";
 
 enum SupportedExtensions {
   ejs = '.ejs',

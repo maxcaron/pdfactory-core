@@ -48,7 +48,7 @@ export default [
     plugins: [
       del({
         targets: [
-          ...(devMode ? ["dist/**/*"] : []),
+          ...(!devMode ? ["dist/**/*"] : []),
           ...(devMode ? ["build/**/*"] : []),
         ],
       }),

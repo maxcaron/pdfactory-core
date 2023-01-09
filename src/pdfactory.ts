@@ -1,8 +1,8 @@
 import puppeteer, { Browser, PDFOptions } from "puppeteer";
 import merge from "lodash.merge";
 
-import { compileRenderingFunctions } from "./compileRenderingFunctions.js";
-import { Config, PdfRequest, initialise, TemplateFunctions } from "./types.js";
+import { compileRenderingFunctions } from "./compileRenderingFunctions";
+import { Config, PdfRequest, initialise, TemplateFunctions } from "./types";
 
 const LastConnection500ms = "networkidle0";
 

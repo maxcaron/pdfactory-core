@@ -1,7 +1,7 @@
 {
   "author": "PdFactory",
   "name": "pdfactory",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "type": "module",
   "files": [
     "dist/pdfactory.d.ts",
@@ -53,7 +53,7 @@
     "puppeteer": "19.4.1"
   },
   "engines": {
-    "node": "^16.18.1"
+    "node": ">=16.0.0 <17" 
   },
   "repository": {
     "type": "git",

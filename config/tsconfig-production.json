@@ -18,7 +18,7 @@
       "ESNext",
       "DOM"
     ],
-    "moduleResolution": "Node",
+    "moduleResolution": "Node16",
 
     "useDefineForClassFields": true,
     "sourceMap": true,
@@ -32,6 +32,8 @@
     "strict": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
     "declaration": true
   }
 }

@@ -12,10 +12,11 @@
     "rootDir": "../src",
     "outDir": "../build",
 
-    "target": "ES2022",
-    "module": "Node16",
+    "target": "ESNext",
+    "module": "ESNext",
     "lib": [
-      "ES2022"
+      "ESNext",
+      "DOM"
     ],
     "moduleResolution": "Node16",
 
@@ -28,7 +29,6 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "allowJs": false,
     "strict": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
