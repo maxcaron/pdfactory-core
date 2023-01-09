@@ -40,7 +40,6 @@ export default [
             {
               file: "build/bundle.js",
               format: "es",
-              sourcemap: true,
               plugins: [],
             },
           ]
@@ -57,7 +56,7 @@ export default [
       ...(!devMode ? [terser()] : []),
       nodeResolve({ preferBuiltins: true, rootDir: path.join(dirname, "..") }),
       typescript({
-        tsconfig: path.join(dirname, "./tsconfig-local.json"),
+        tsconfig: path.join(dirname, `./tsconfig-${devMode ? 'dev' : 'production'}.json`),
       }),
       eslint({
         fix: true,
