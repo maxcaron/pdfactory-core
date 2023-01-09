@@ -1,16 +1,16 @@
 {
   "author": "PdFactory",
   "name": "pdfactory",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "type": "module",
   "files": [
     "dist"
   ],
-  "types": "./dist/index.d.ts",
+  "types": "./dist/main.d.ts",
   "main": "./dist/pdfactory.umd.cjs",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/main.d.ts",
       "require": "./dist/pdfactory.umd.cjs"
     }
   },

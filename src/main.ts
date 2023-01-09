@@ -2,7 +2,7 @@ import puppeteer, { Browser, PDFOptions } from "puppeteer";
 import merge from "lodash.merge";
 
 import { compileRenderingFunctions } from "./compileRenderingFunctions.js";
-import { Config, PdfRequest, Initialise, TemplateFunctions } from "./types.js";
+import { Config, PdfRequest, initialise, TemplateFunctions } from "./types.js";
 
 const LastConnection500ms = "networkidle0";
 
@@ -44,8 +44,8 @@ const pdfOptions: PDFOptions = {
   },
 };
 
-const initialise: Initialise = async (additionalConfig?: Config) => {
-  let browser : Browser | null = null;
+const initialise: initialise = async (additionalConfig?: Config) => {
+  let browser: Browser | null = null;
 
   try {
     browser = await puppeteer.launch({
@@ -55,15 +55,16 @@ const initialise: Initialise = async (additionalConfig?: Config) => {
     });
   } catch (e) {
     console.log(e);
-    process.exit(1); 
+    process.exit(1);
   }
 
   const config: Config = merge(defaultConfig, additionalConfig);
 
-  const renderingFunctions: TemplateFunctions = compileRenderingFunctions(config);
+  const renderingFunctions: TemplateFunctions =
+    compileRenderingFunctions(config);
 
   return async ({ document, data }: PdfRequest) => {
-    const renderFunction: ejs.TemplateFunction = renderingFunctions[document]
+    const renderFunction: ejs.TemplateFunction = renderingFunctions[document];
 
     if (!renderFunction) {
       throw new Error(`Document ${document} not found`);
@@ -81,4 +82,4 @@ const initialise: Initialise = async (additionalConfig?: Config) => {
   };
 };
 
-export default initialise;
+export { initialise };

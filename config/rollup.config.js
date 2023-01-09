@@ -30,7 +30,6 @@ export default [
             {
               file: `dist/pdfactory.umd.cjs`,
               format: "cjs",
-              exports: "default",
               inlineDynamicImports: true,
             },
           ]
