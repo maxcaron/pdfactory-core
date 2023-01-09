@@ -65,8 +65,8 @@ export default [
           "dist/**/*",
           "build/**/*",
         ],
+        include: ["../src/**/*", "../test/**/*"]
       }),
-      commonjs(),
     ],
   },
 ];

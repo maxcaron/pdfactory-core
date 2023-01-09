@@ -1,7 +1,7 @@
 {
   "author": "PdFactory",
   "name": "pdfactory",
-  "version": "0.0.21",
+  "version": "0.0.23",
   "type": "module",
   "files": [
     "dist/pdfactory.d.ts",
@@ -23,7 +23,6 @@
     "test-build": "node ./test/testBuild.js"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^23.0.0",
     "@rollup/plugin-eslint": "^9.0.1",
     "@rollup/plugin-node-resolve": "^15.0.0",
     "@rollup/plugin-terser": "^0.2.1",
@@ -53,7 +52,7 @@
     "puppeteer": "19.4.1"
   },
   "engines": {
-    "node": ">=16.0.0 <17" 
+    "node": ">=16.0.0 <17"
   },
   "repository": {
     "type": "git",
