@@ -1,6 +1,6 @@
 {
   "include": [
-    "../src/main.ts",
+    "../src/pdfactory.ts",
     "../src/types.ts"
   ],
   "exclude": [

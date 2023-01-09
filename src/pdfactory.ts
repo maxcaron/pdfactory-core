@@ -44,7 +44,7 @@ const pdfOptions: PDFOptions = {
   },
 };
 
-const initialise: initialise = async (additionalConfig?: Config) => {
+const pdfactory: initialise = async (additionalConfig?: Config) => {
   let browser: Browser | null = null;
 
   try {
@@ -82,4 +82,4 @@ const initialise: initialise = async (additionalConfig?: Config) => {
   };
 };
 
-export { initialise };
+export { pdfactory };

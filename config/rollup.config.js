@@ -20,7 +20,7 @@ const devMode = process.env.NODE_ENV === "development";
 
 export default [
   {
-    input: "./src/main.ts",
+    input: "./src/pdfactory.ts",
     watch: {
       include: ["./src/**/*", "./test/**/*"],
     },
