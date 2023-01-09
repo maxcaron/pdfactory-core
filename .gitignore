@@ -26,3 +26,5 @@ build
 dist
 
 TODO.md
+
+.local-chromium

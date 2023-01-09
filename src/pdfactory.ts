@@ -1,6 +1,5 @@
 import puppeteer, { Browser, PDFOptions } from "puppeteer";
 import merge from "lodash.merge";
-
 import { compileRenderingFunctions } from "./compileRenderingFunctions";
 import { Config, PdfRequest, initialise, TemplateFunctions } from "./types";
 
@@ -45,18 +44,12 @@ const pdfOptions: PDFOptions = {
 };
 
 const pdfactory: initialise = async (additionalConfig?: Config) => {
-  let browser: Browser | null = null;
-
-  try {
-    browser = await puppeteer.launch({
-      headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      ignoreDefaultArgs: ["--disable-extensions"],
-    });
-  } catch (e) {
-    console.log(e);
-    process.exit(1);
-  }
+  const browser = await puppeteer.launch({
+    headless: true,
+    executablePath: process.env.downloadPath,
+    args: ["--no-sandbox"],
+    ignoreDefaultArgs: ['--disable-extensions'],
+  })
 
   const config: Config = merge(defaultConfig, additionalConfig);
 

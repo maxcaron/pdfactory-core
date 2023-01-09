@@ -5,6 +5,15 @@ import terser from "@rollup/plugin-terser";
 import del from "rollup-plugin-delete";
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import dotenv from "dotenv";
+import { BrowserFetcher } from "puppeteer";
+import copy from 'rollup-plugin-copy'
+
+const downloadPath = `${process.cwd()}/dist/.local-chromium`
+console.log(downloadPath)
+const createBrowserFetcher = () => {
+    return new BrowserFetcher({path: downloadPath, localRevisions: ['1045629']});
+};
+
 
 dotenv.config({
   path: process.cwd() + `/config/.env.${process.env.DEV ? "dev" : "procution"}`,
@@ -16,6 +25,14 @@ const dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 const devMode = process.env.NODE_ENV === "development";
 
+const browserFetcher = createBrowserFetcher();
+const revisionInfo = await browserFetcher.download('1045629');
+
+if(!revisionInfo?.executablePath) {
+  throw new Error('Could not find executable path for browser revision');
+}
+
+process.env.downloadPath = revisionInfo.executablePath
 
 export default [
   {
@@ -51,7 +68,7 @@ export default [
           ...(devMode ? ["build/**/*"] : []),
         ],
       }),
-      // ...(!devMode ? [terser()] : []),
+      ...(!devMode ? [terser()] : []),
       typescript({
         tsconfig: path.join(dirname, `./tsconfig-${devMode ? 'dev' : 'production'}.json`),
       }),
