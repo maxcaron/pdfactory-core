@@ -1,19 +1,21 @@
-import pkg from "../package.json" assert { type: "json" };
 import * as url from "url";
+import path from "path";
+import typescript from "@rollup/plugin-typescript";
+import terser from "@rollup/plugin-terser";
+import del from "rollup-plugin-delete";
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import dotenv from "dotenv";
 
 dotenv.config({
   path: process.cwd() + `/config/.env.${process.env.DEV ? "dev" : "procution"}`,
 });
 
-import path from "path";
-import dotenv from "dotenv";
-import typescript from "@rollup/plugin-typescript";
-import terser from "@rollup/plugin-terser";
-import del from "rollup-plugin-delete";
+import pkg from "../package.json" assert { type: "json" };
 
 const dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 const devMode = process.env.NODE_ENV === "development";
+
 
 export default [
   {
@@ -49,10 +51,11 @@ export default [
           ...(devMode ? ["build/**/*"] : []),
         ],
       }),
-      ...(!devMode ? [terser()] : []),
+      // ...(!devMode ? [terser()] : []),
       typescript({
         tsconfig: path.join(dirname, `./tsconfig-${devMode ? 'dev' : 'production'}.json`),
-      })
+      }),
+      nodeResolve()
     ],
   },
 ];

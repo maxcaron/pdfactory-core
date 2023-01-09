@@ -16,7 +16,6 @@
     "module": "ESNext",
     "lib": [
       "ESNext",
-      "DOM"
     ],
     "moduleResolution": "Node16",
 
