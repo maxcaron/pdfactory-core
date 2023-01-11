@@ -1,8 +1,10 @@
-import { PDFOptions } from "puppeteer";
+import { PDFOptions as PuppeteerPDFOptions } from "puppeteer";
 
 export type DocumentNotFoundError = "DocumentNotFoundError";
 export type ErrorRenderingDocumentError = "ErrorRenderingDocumentError";
 export type UnsupportedFileTypeError = "UnsupportedFileTypeError";
+
+export type PDFOptions = Omit<PuppeteerPDFOptions, "headerTemplate" | "footerTemplate" | "displayHeaderFooter">;
 
 export interface PdfactoryError {
   type: DocumentNotFoundError | ErrorRenderingDocumentError;

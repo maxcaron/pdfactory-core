@@ -1,8 +1,8 @@
-import ejs from "ejs";
+import { Options } from "ejs";
 import { PDFOptions } from "puppeteer";
 import { Config } from "./types";
 
-export const DEFAULT_EJS_OPTIONS: ejs.Options = {
+export const DEFAULT_EJS_OPTIONS: Options = {
   root: "src",
   views: ["src/templates"], // For relative paths
 };

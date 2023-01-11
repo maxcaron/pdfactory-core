@@ -1,3 +1,5 @@
+import { Browser } from "puppeteer";
+
 import {
   compileRenderingFunctions,
   renderHtmlStrings,
@@ -11,7 +13,6 @@ import {
 } from "./types";
 import { htmlToPdf, launchBrowser } from "./htmlToPdf";
 import { DEFAULT_EJS_CONFIG, DEFAULT_PDF_OPTIONS } from "./constants";
-import { Browser } from "puppeteer";
 
 let browser: Browser;
 let renderingFunctions: RenderingFunctions;
