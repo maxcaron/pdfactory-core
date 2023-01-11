@@ -1,4 +1,19 @@
-export type initialise = (additionalConfig?: Config) => Promise<({ document, data }: PdfRequest) => Promise<Buffer>>
+import { PDFOptions } from "puppeteer";
+
+export type DocumentNotFoundError = "DocumentNotFoundError";
+export type ErrorRenderingDocumentError = "ErrorRenderingDocumentError";
+
+export interface PdfactoryError {
+  type: DocumentNotFoundError | ErrorRenderingDocumentError;
+  message: string;
+}
+
+export type Pdfactory = (
+  additionalConfig: Config,
+  pdfOptions: PDFOptions
+) => Promise<
+  ({ document, data }: PdfRequest) => Promise<Buffer | PdfactoryError>
+>;
 
 export interface Config {
   templatesDir: string[];
@@ -7,9 +22,11 @@ export interface Config {
 
 export interface PdfRequest {
   document: string;
+  header?: string;
+  footer?: string;
   data: object;
 }
 
-export interface TemplateFunctions {
+export interface RenderingFunctions {
   [document: string]: ejs.TemplateFunction;
 }

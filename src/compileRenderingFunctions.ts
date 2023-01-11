@@ -3,7 +3,7 @@ import ejs from "ejs";
 import path, { ParsedPath } from "path";
 import { readFile } from "./utils";
 
-import { TemplateFunctions, Config } from "./types";
+import { RenderingFunctions, Config } from "./types";
 
 enum SupportedExtensions {
   ejs = '.ejs',
@@ -13,7 +13,7 @@ enum SupportedExtensions {
 const renderFunctionFromFile = (
   config: Config,
   filePath: string
-): TemplateFunctions => {
+): RenderingFunctions => {
   const parsedPath: ParsedPath = path.parse(filePath);
   const filename = parsedPath.name;
 
@@ -49,15 +49,15 @@ const renderFunctionFromFile = (
 const renderFunctionsFromDirectories = (
   config: Config,
   templatesDir: string[]
-): TemplateFunctions => {
-  return templatesDir.reduce<TemplateFunctions>(
-    (compileRenderingFunctions: TemplateFunctions, directory: string) => {
-      let newTemplateFunctions: TemplateFunctions = {};
+): RenderingFunctions => {
+  return templatesDir.reduce<RenderingFunctions>(
+    (compileRenderingFunctions: RenderingFunctions, directory: string) => {
+      let newTemplateFunctions: RenderingFunctions = {};
 
       const files = fs.readdirSync(path.resolve(directory));
 
       files.forEach((file) => {
-        const renderFunction: TemplateFunctions = renderFunctionFromFile(
+        const renderFunction: RenderingFunctions = renderFunctionFromFile(
           config,
           path.resolve(directory, file)
         );
@@ -67,14 +67,16 @@ const renderFunctionsFromDirectories = (
 
       return { ...compileRenderingFunctions, ...newTemplateFunctions };
     },
-    {} as TemplateFunctions
+    {} as RenderingFunctions
   );
 };
 
-const compileRenderingFunctions = (config: Config): TemplateFunctions => {
+const compileRenderingFunctions = (config: Config): RenderingFunctions => {
   const { templatesDir } = config;
+  
+  const renderingFunctions = renderFunctionsFromDirectories(config, templatesDir)
 
-  return renderFunctionsFromDirectories(config, templatesDir);
+  return renderingFunctions
 };
 
 export { compileRenderingFunctions };

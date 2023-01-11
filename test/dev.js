@@ -5,12 +5,12 @@ import { fileURLToPath } from "url";
 import monitor from "express-status-monitor";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
-const templatesDir = path.join(dirname, "../src", "templates");
+const templatesDir = path.join(dirname, "..", "src", "templates");
+const headersDir = path.join(dirname, "..", "src", "templates", "headers");
 
 const DEFAULT_CONFIG = {
-  templatesDir: [templatesDir],
+  templatesDir: [templatesDir, headersDir],
   ejsOptions: {
-    root: "test",
     views: [templatesDir], // For relative paths
   },
 };
@@ -33,10 +33,10 @@ const init = async () => {
     received = received + 1;
 
     try {
-      pdf = await pdfactoryHandler(req.body);
+      pdf = await pdfactoryHandler(req.body)
     } catch (e) {
-      console.log(e);
-      res.sendStatus(400);
+      res.send(e);
+      return;
     }
 
     res.set({

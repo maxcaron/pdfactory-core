@@ -1,7 +1,7 @@
 import puppeteer, { Browser, PDFOptions } from "puppeteer";
-import merge from "lodash.merge";
+
 import { compileRenderingFunctions } from "./compileRenderingFunctions";
-import { Config, PdfRequest, initialise, TemplateFunctions } from "./types";
+import { Config, PdfRequest, Pdfactory, RenderingFunctions, PdfactoryError } from "./types";
 
 const LastConnection500ms = "networkidle0";
 
@@ -25,13 +25,14 @@ const defaultEjsOptions: ejs.Options = {
   views: ["src/templates"], // For relative paths
 };
 
-const defaultConfig: Config = {
+const DEFAULT_EJS_CONFIG: Config = {
   templatesDir: [],
   ejsOptions: defaultEjsOptions,
 };
 
-const pdfOptions: PDFOptions = {
-  format: "letter",
+const DEFAULT_PDF_OPTIONS: PDFOptions = {
+  format: "a4",
+  printBackground: true,
   displayHeaderFooter: true,
   headerTemplate: "",
   footerTemplate: "",
@@ -43,32 +44,50 @@ const pdfOptions: PDFOptions = {
   },
 };
 
-const pdfactory: initialise = async (additionalConfig?: Config) => {
+const pdfactory: Pdfactory = async (config = DEFAULT_EJS_CONFIG, pdfOptions = DEFAULT_PDF_OPTIONS) => {
   const browser = await puppeteer.launch({
     headless: true,
-    executablePath: process.env.downloadPath,
     args: ["--no-sandbox"],
     ignoreDefaultArgs: ['--disable-extensions'],
   })
 
-  const config: Config = merge(defaultConfig, additionalConfig);
-
-  const renderingFunctions: TemplateFunctions =
+  const renderingFunctions: RenderingFunctions =
     compileRenderingFunctions(config);
 
-  return async ({ document, data }: PdfRequest) => {
+  return async ({ document, data, header, footer }: PdfRequest): Promise<Buffer | PdfactoryError> => {
     const renderFunction: ejs.TemplateFunction = renderingFunctions[document];
+    let headerTemplate: string | null = null
+    let footerTemplate: string | null = null
 
     if (!renderFunction) {
-      throw new Error(`Document ${document} not found`);
+      return Promise.reject({ type: 'DocumentNotFoundError', message: 'Document not found' })
     }
 
-    const renderedHtml = renderFunction(data);
+    let renderedHtml: string = '';
 
+    try {
+      renderedHtml = renderFunction(data);
+
+      if (header) {
+        headerTemplate = renderingFunctions[header](data)
+      }
+
+      if (footer) {
+        footerTemplate = renderingFunctions[footer](data)
+      }
+    } catch (e) {
+      return Promise.reject({ type: 'ErrorRenderingDocumentError', message: 'Error rendering document', error: e })
+    }
+    console.log(headerTemplate)
     const pdf: Buffer = await generateWithBrowser(
-      browser as Browser,
+      browser,
       renderedHtml,
-      pdfOptions
+      {
+        ...pdfOptions,
+        displayHeaderFooter: headerTemplate !== null || footerTemplate !== null,
+        headerTemplate: headerTemplate ?? pdfOptions.headerTemplate,
+        footerTemplate: footerTemplate  ?? pdfOptions.footerTemplate,
+      }
     );
 
     return pdf;

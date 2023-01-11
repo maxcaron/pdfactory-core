@@ -1,43 +1,46 @@
 import * as url from "url";
-import path from "path";
+import path, { resolve } from "path";
 import typescript from "@rollup/plugin-typescript";
 import terser from "@rollup/plugin-terser";
 import del from "rollup-plugin-delete";
-import { nodeResolve } from '@rollup/plugin-node-resolve';
+import { nodeResolve } from "@rollup/plugin-node-resolve";
 import dotenv from "dotenv";
 import { BrowserFetcher } from "puppeteer";
-import copy from 'rollup-plugin-copy'
+import { defineConfig } from 'rollup';
 
-const downloadPath = `${process.cwd()}/dist/.local-chromium`
-console.log(downloadPath)
+import pkg from "../package.json" assert { type: "json" };
+
+const downloadPath = `${process.cwd()}/dist/.local-chromium`;
+
 const createBrowserFetcher = () => {
-    return new BrowserFetcher({path: downloadPath, localRevisions: ['1045629']});
+  return new BrowserFetcher({
+    path: downloadPath,
+    localRevisions: ["1045629"],
+  });
 };
-
 
 dotenv.config({
   path: process.cwd() + `/config/.env.${process.env.DEV ? "dev" : "procution"}`,
 });
-
-import pkg from "../package.json" assert { type: "json" };
 
 const dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 const devMode = process.env.NODE_ENV === "development";
 
 const browserFetcher = createBrowserFetcher();
-const revisionInfo = await browserFetcher.download('1045629');
+const revisionInfo = await browserFetcher.download("1045629");
 
-if(!revisionInfo?.executablePath) {
-  throw new Error('Could not find executable path for browser revision');
+if (!revisionInfo?.executablePath) {
+  throw new Error("Could not find executable path for browser revision");
 }
 
-process.env.downloadPath = revisionInfo.executablePath
+process.env.downloadPath = revisionInfo.executablePath;
 
-export default [
+export default defineConfig([
   {
     input: "./src/pdfactory.ts",
     watch: {
+      clearScreen: true,
       include: ["./src/**/*", "./test/**/*"],
     },
     output: [
@@ -55,7 +58,6 @@ export default [
             {
               file: "build/bundle.js",
               format: "es",
-              plugins: [],
             },
           ]
         : []),
@@ -70,9 +72,12 @@ export default [
       }),
       ...(!devMode ? [terser()] : []),
       typescript({
-        tsconfig: path.join(dirname, `./tsconfig-${devMode ? 'dev' : 'production'}.json`),
+        tsconfig: path.join(
+          dirname,
+          `./tsconfig-${devMode ? "dev" : "production"}.json`
+        ),
       }),
-      nodeResolve()
+      nodeResolve(),
     ],
   },
-];
+])

@@ -1,7 +1,7 @@
 {
   "include": [
     "../src/**/*",
-    "../test/dev.js"
+    "../src/types.ts"
   ],
   "exclude": [
     "../node_modules",
@@ -33,5 +33,6 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
+    "declaration": true
   }
 }
