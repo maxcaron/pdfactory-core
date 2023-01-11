@@ -2,6 +2,7 @@ import { PDFOptions } from "puppeteer";
 
 export type DocumentNotFoundError = "DocumentNotFoundError";
 export type ErrorRenderingDocumentError = "ErrorRenderingDocumentError";
+export type UnsupportedFileTypeError = "UnsupportedFileTypeError";
 
 export interface PdfactoryError {
   type: DocumentNotFoundError | ErrorRenderingDocumentError;
@@ -12,7 +13,7 @@ export type Pdfactory = (
   additionalConfig: Config,
   pdfOptions: PDFOptions
 ) => Promise<
-  ({ document, data }: PdfRequest) => Promise<Buffer | PdfactoryError>
+  ({ document, data }: PdfRequest) => UnsupportedFileTypeError | Promise<Buffer | PdfactoryError>
 >;
 
 export interface Config {

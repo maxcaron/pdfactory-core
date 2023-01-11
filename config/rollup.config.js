@@ -1,12 +1,12 @@
 import * as url from "url";
-import path, { resolve } from "path";
+import path from "path";
 import typescript from "@rollup/plugin-typescript";
 import terser from "@rollup/plugin-terser";
 import del from "rollup-plugin-delete";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import dotenv from "dotenv";
 import { BrowserFetcher } from "puppeteer";
-import { defineConfig } from 'rollup';
+import { defineConfig } from "rollup";
 
 import pkg from "../package.json" assert { type: "json" };
 
@@ -39,10 +39,6 @@ process.env.downloadPath = revisionInfo.executablePath;
 export default defineConfig([
   {
     input: "./src/pdfactory.ts",
-    watch: {
-      clearScreen: true,
-      include: ["./src/**/*", "./test/**/*"],
-    },
     output: [
       ...(!devMode
         ? [
@@ -80,4 +76,4 @@ export default defineConfig([
       nodeResolve(),
     ],
   },
-])
+]);

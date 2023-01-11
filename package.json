@@ -19,8 +19,8 @@
   },
   "scripts": {
     "dist": "rimraf ./dist && npx rollup --config ./config/rollup.config.js",
-    "dev": "DEV=true concurrently \"yarn dev:watch\" \"wait-on ./build/bundle.js && nodemon --inspect --watch build --watch test ./test/dev.js\"",
-    "dev:watch": "rimraf ./build && npx rollup -w -c ./config/rollup.config.js",
+    "dev": "DEV=true concurrently \"yarn build\" \"wait-on ./build/bundle.js && nodemon --inspect --watch test --watch build ./test/dev.js\"",
+    "build": "rimraf ./build && npx rollup -w -c ./config/rollup.config.js",
     "test-build": "node ./test/testBuild.js"
   },
   "devDependencies": {

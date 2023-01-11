@@ -33,7 +33,7 @@ const init = async () => {
     received = received + 1;
 
     try {
-      pdf = await pdfactoryHandler(req.body)
+      pdf = await pdfactoryHandler(req.body);
     } catch (e) {
       res.send(e);
       return;
@@ -56,6 +56,6 @@ const init = async () => {
   return app;
 };
 
-await init();
+init();
 
 console.log("Server started");
