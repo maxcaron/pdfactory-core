@@ -1,15 +1,22 @@
-import * as url from 'url';
-import path from 'path';
 import { readFileSync } from 'fs';
 import typescript from '@rollup/plugin-typescript';
 import terser from '@rollup/plugin-terser';
 import del from 'rollup-plugin-delete';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import dotenv from 'dotenv';
 import { BrowserFetcher } from 'puppeteer';
 import { defineConfig } from 'rollup';
 
+import dotenv from 'dotenv';
+dotenv.config({
+  path: process.cwd() + `/config/.env.${process.env.DEV ? 'dev' : 'procution'}`
+});
+
+const devMode = process.env.NODE_ENV === 'development';
+
 const pkg = JSON.parse(readFileSync('./package.json'));
+
+const tsConfig = JSON.parse(readFileSync('./tsconfig.json'));
+tsConfig.compilerOptions.outDir = devMode ? './build' : './dist';
 
 const downloadPath = `${process.cwd()}/dist/.local-chromium`;
 
@@ -19,14 +26,6 @@ const createBrowserFetcher = () => {
     localRevisions: ['1045629']
   });
 };
-
-dotenv.config({
-  path: process.cwd() + `/config/.env.${process.env.DEV ? 'dev' : 'procution'}`
-});
-
-const dirname = url.fileURLToPath(new URL('.', import.meta.url));
-
-const devMode = process.env.NODE_ENV === 'development';
 
 const browserFetcher = createBrowserFetcher();
 const revisionInfo = await browserFetcher.download('1045629');
@@ -68,12 +67,7 @@ export default defineConfig([
         ]
       }),
       ...(!devMode ? [terser()] : []),
-      typescript({
-        tsconfig: path.join(
-          dirname,
-          '../tsconfig.json'
-        )
-      }),
+      typescript(tsConfig),
       nodeResolve()
     ]
   }
