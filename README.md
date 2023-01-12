@@ -1,5 +1,10 @@
 # pdfactory-core
+- Generate pdf documents from html files. 
+- Generate dynamic pdf documents using ejs files as templates. 
 
+## Supports
+- **html**
+- **ejs**
 ## Installation
 ```
 yarn add pdfactory-code
@@ -7,17 +12,51 @@ yarn add pdfactory-code
 
 ## Example using ejs and express
 
+### Directory structure
+```
+/main.js
+/templates
+  /partials
+    /page1.ejs
+  /document.ejs
+```
+### document.ejs
+```
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+</head>
+
+<body>
+  <div>
+  <%- include('./partials/page1.ejs'); -%>
+  </div>
+</body>
+
+</html>
+```
+
+### page1.ejs
+```
+<div>
+  <%= title %>
+</div>
+```
+
+### main.js
 ```
 const express = require("express");
 const path = require("path");
 const { pdfactory } = require("pdfactory-core");
 
 const templatesDir = path.join(__dirname, "templates");
+const partialsDir = path.join(__dirname, "templates", "partials");
 
 const DEFAULT_CONFIG = {
-  templatesDir: [templatesDir],
+  templatesDir: [templatesDir, partialsDir],
   ejsOptions: {
-    root: "test", // Directory containing template files
     views: [templatesDir], // For relative include paths  
   },
 };
@@ -55,3 +94,15 @@ const init = async () => {
 };
 
 init();
+```
+
+### Example request
+```
+POST https://localhost:3000
+{
+    "document": "document",
+    "data": {
+        "title": "pdfactory pdf"
+    }
+}
+```
