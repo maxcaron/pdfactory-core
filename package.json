@@ -1,7 +1,7 @@
 {
   "author": "pdfactory-core",
   "name": "pdfactory-core",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "type": "module",
   "files": [
     "dist/pdfactory.d.ts",
@@ -59,7 +59,18 @@
     "type": "git",
     "url": "https://github.com/maxcaron/pdfactory-core.git"
   },
-  "keywords": [],
+  "keywords": [
+    "pdf",
+    "pdfactory",
+    "pdfactory-core",
+    "pdf generator",
+    "generate pdf",
+    "pdf from ejs",
+    "ejs",
+    "ejs to pdf",
+    "pdf from html",
+    "html to pdf"
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/maxcaron/pdfactory-core/issues"
