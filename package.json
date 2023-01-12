@@ -1,6 +1,6 @@
 {
-  "author": "PdFactory",
-  "name": "pdfactory",
+  "author": "pdfactory-core",
+  "name": "pdfactory-core",
   "version": "0.0.26",
   "type": "module",
   "files": [
@@ -60,12 +60,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://https://github.com/maxcaron/pdfactory.git"
+    "url": "https://github.com/maxcaron/pdfactory-core.git"
   },
   "keywords": [],
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/maxcaron/pdfactory/issues"
+    "url": "https://github.com/maxcaron/pdfactory-core/issues"
   },
-  "homepage": "https://https://github.com/maxcaron/pdfactory"
+  "homepage": "https://github.com/maxcaron/pdfactory-core"
 }
