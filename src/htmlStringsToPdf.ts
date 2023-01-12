@@ -1,8 +1,8 @@
-import puppeteer, { Browser, PDFOptions } from "puppeteer";
+import { Browser, PDFOptions } from "puppeteer";
 
 const LastConnection500ms = "networkidle0";
 
-export const htmlToPdf = async (
+export const htmlStringsToPdf = async (
   browser: Browser,
   renderedHtml: string,
   pdfOptions: PDFOptions
@@ -15,12 +15,4 @@ export const htmlToPdf = async (
   await page.close();
 
   return pdf;
-};
-
-export const launchBrowser = async (): Promise<Browser> => {
-  return await puppeteer.launch({
-    headless: true,
-    args: ["--no-sandbox"],
-    ignoreDefaultArgs: ["--disable-extensions"],
-  });
 };

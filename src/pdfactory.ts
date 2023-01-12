@@ -4,14 +4,15 @@ import {
   compileRenderingFunctions,
   renderHtmlStrings,
   RenderedHtmlStrings,
-} from "./compileRenderingFunctions";
+} from "./renderingFunctions";
 import {
   PdfRequest,
   Pdfactory,
   RenderingFunctions,
   PdfactoryError,
 } from "./types";
-import { htmlToPdf, launchBrowser } from "./htmlToPdf";
+import { htmlStringsToPdf } from "./htmlStringsToPdf";
+import { launchBrowser } from "./browser";
 import { DEFAULT_EJS_CONFIG, DEFAULT_PDF_OPTIONS } from "./constants";
 
 let browser: Browser;
@@ -38,7 +39,7 @@ const pdfactory: Pdfactory = async (
       pdfRequest
     ) as RenderedHtmlStrings;
 
-    const pdf: Buffer = await htmlToPdf(browser, renderedHtml, {
+    const pdf: Buffer = await htmlStringsToPdf(browser, renderedHtml, {
       ...pdfOptions,
       displayHeaderFooter: !!(headerTemplate || footerTemplate),
       headerTemplate,
