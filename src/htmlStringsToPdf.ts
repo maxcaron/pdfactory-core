@@ -1,6 +1,6 @@
-import { Browser, PDFOptions } from "puppeteer";
+import { Browser, PDFOptions } from 'puppeteer';
 
-const LastConnection500ms = "networkidle0";
+const LastConnection500ms = 'networkidle0';
 
 export const htmlStringsToPdf = async (
   browser: Browser,

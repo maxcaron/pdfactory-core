@@ -1,35 +1,39 @@
-import { PDFOptions as PuppeteerPDFOptions } from "puppeteer";
+import { PDFOptions as PuppeteerPDFOptions } from 'puppeteer';
 
-export type DocumentNotFoundError = "DocumentNotFoundError";
-export type DocumentRenderingError = "DocumentRenderingError";
-export type UnsupportedFileTypeError = "UnsupportedFileTypeError";
+export type DocumentNotFoundError = 'DocumentNotFoundError'
+export type DocumentRenderingError = 'DocumentRenderingError'
+export type UnsupportedFileTypeError = 'UnsupportedFileTypeError'
 
-export type PDFOptions = Omit<PuppeteerPDFOptions, "headerTemplate" | "footerTemplate" | "displayHeaderFooter">;
+export type PDFOptions = Omit<
+PuppeteerPDFOptions,
+'headerTemplate' | 'footerTemplate' | 'displayHeaderFooter'
+>
 
 export interface PdfactoryError {
-  type: DocumentNotFoundError | DocumentRenderingError;
-  message: string;
+  type: DocumentNotFoundError | DocumentRenderingError
+  message: string
 }
 
 export type Pdfactory = (
   additionalConfig: Config,
   pdfOptions: PDFOptions
 ) => Promise<
-  ({ document, data }: PdfRequest) => UnsupportedFileTypeError | Promise<Buffer | PdfactoryError>
->;
+({
+  document,
+  data
+}: PdfRequest) => UnsupportedFileTypeError | Promise<Buffer | PdfactoryError>
+>
 
 export interface Config {
-  templatesDir: string[];
-  ejsOptions: ejs.Options;
+  templatesDir: string[]
+  ejsOptions: ejs.Options
 }
 
 export interface PdfRequest {
-  document: string;
-  header?: string;
-  footer?: string;
-  data: object;
+  document: string
+  header?: string
+  footer?: string
+  data: object
 }
 
-export interface RenderingFunctions {
-  [document: string]: ejs.TemplateFunction;
-}
+export type RenderingFunctions = Record<string, ejs.TemplateFunction>

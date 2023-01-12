@@ -1,19 +1,19 @@
-import fs from "fs";
-import ejs from "ejs";
-import path, { ParsedPath } from "path";
-import { readFile } from "./utils";
+import fs from 'fs';
+import ejs from 'ejs';
+import path, { ParsedPath } from 'path';
+import { readFile } from './utils';
 
 import {
   RenderingFunctions,
   Config,
   PdfactoryError,
   PdfRequest,
-  UnsupportedFileTypeError,
-} from "./types";
+  UnsupportedFileTypeError
+} from './types';
 
 enum SupportedExtensions {
-  ejs = ".ejs",
-  html = ".html",
+  ejs = '.ejs',
+  html = '.html' ,
 }
 
 const renderFunctionFromFile = (
@@ -31,9 +31,9 @@ const renderFunctionFromFile = (
           ...config.ejsOptions,
           filename,
           async: false,
-          cache: true,
+          cache: true
         }
-      ) as ejs.TemplateFunction,
+      ) as ejs.TemplateFunction
     };
   } else if (parsedPath.ext === SupportedExtensions.html) {
     return {
@@ -43,14 +43,14 @@ const renderFunctionFromFile = (
           ...config.ejsOptions,
           filename,
           async: false,
-          cache: true,
+          cache: true
         }
-      ) as ejs.TemplateFunction,
+      ) as ejs.TemplateFunction
     };
-  } else if (parsedPath.ext !== "") {
+  } else if (parsedPath.ext !== '') {
     throw {
-      type: "UnsupportedFileTypeError",
-      message: `File "${filename}${parsedPath.ext}" has unsupported file type. Supported types: .ejs, .html`,
+      type: 'UnsupportedFileTypeError',
+      message: `File "${filename}${parsedPath.ext}" has unsupported file type. Supported types: .ejs, .html`
     };
   } else {
     return {};
@@ -78,7 +78,7 @@ const renderFunctionsFromDirectories = (
 
       return { ...compileRenderingFunctions, ...newTemplateFunctions };
     },
-    {} as RenderingFunctions
+    {}
   );
 };
 
@@ -96,23 +96,23 @@ const compileRenderingFunctions = (
 };
 
 export interface RenderedHtmlStrings {
-  renderedHtml: string;
-  headerTemplate: string | undefined;
-  footerTemplate: string | undefined;
+  renderedHtml: string
+  headerTemplate: string | undefined
+  footerTemplate: string | undefined
 }
 
 const renderHtmlStrings = (
   renderingFunctions: RenderingFunctions,
   { document, data, header, footer }: PdfRequest
 ): RenderedHtmlStrings | PdfactoryError => {
-  let renderedHtml = "";
+  let renderedHtml = '';
   let headerTemplate: string | undefined;
   let footerTemplate: string | undefined;
 
   const renderFunction: ejs.TemplateFunction = renderingFunctions[document];
 
   if (!renderFunction) {
-    throw { type: "DocumentNotFoundError", message: "Document not found" };
+    throw { type: 'DocumentNotFoundError', message: 'Document not found' };
   }
 
   try {
@@ -127,8 +127,8 @@ const renderHtmlStrings = (
     }
   } catch (e) {
     throw {
-      type: "DocumentRenderingError",
-      message: "Error rendering document",
+      type: 'DocumentRenderingError',
+      message: 'Error rendering document'
     };
   }
 

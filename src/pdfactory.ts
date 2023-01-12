@@ -1,19 +1,19 @@
-import { Browser } from "puppeteer";
+import { Browser } from 'puppeteer';
 
 import {
   compileRenderingFunctions,
   renderHtmlStrings,
-  RenderedHtmlStrings,
-} from "./renderingFunctions";
+  RenderedHtmlStrings
+} from './renderingFunctions';
 import {
   PdfRequest,
   Pdfactory,
   RenderingFunctions,
-  PdfactoryError,
-} from "./types";
-import { htmlStringsToPdf } from "./htmlStringsToPdf";
-import { launchBrowser } from "./browser";
-import { DEFAULT_EJS_CONFIG, DEFAULT_PDF_OPTIONS } from "./constants";
+  PdfactoryError
+} from './types';
+import { htmlStringsToPdf } from './htmlStringsToPdf';
+import { launchBrowser } from './browser';
+import { DEFAULT_EJS_CONFIG, DEFAULT_PDF_OPTIONS } from './constants';
 
 let browser: Browser;
 let renderingFunctions: RenderingFunctions;
@@ -43,7 +43,7 @@ const pdfactory: Pdfactory = async (
       ...pdfOptions,
       displayHeaderFooter: !!(headerTemplate || footerTemplate),
       headerTemplate,
-      footerTemplate,
+      footerTemplate
     });
 
     return pdf;
