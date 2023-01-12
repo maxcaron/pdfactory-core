@@ -58,7 +58,7 @@ const pdfactory: Pdfactory = async (
 
       return pdf;
     } catch (e) {
-      throw e;
+      return Promise.reject(e);
     }
   };
 };
