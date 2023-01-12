@@ -71,11 +71,11 @@ const init = async () => {
   const requestHandler = async (req, res) => {
     let pdf = null;
 
-    try {
-      pdf = await pdfactoryHandler(req.body);
+     try {
+      pdf = await pdfactoryHandler(req.body)
     } catch (e) {
-      console.log(e)
-      res.sendStatus(400);
+      res.status(400).send(e)
+      return
     }
     
     res.set({

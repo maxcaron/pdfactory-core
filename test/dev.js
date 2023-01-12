@@ -35,7 +35,7 @@ const init = async () => {
     try {
       pdf = await pdfactoryHandler(req.body)
     } catch (e) {
-      res.send(e)
+      res.status(400).send(e)
       return
     }
 

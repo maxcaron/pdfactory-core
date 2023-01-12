@@ -8,7 +8,7 @@ import {
   Config,
   PdfactoryError,
   PdfRequest,
-  UnsupportedFileTypeError
+  ErrorType
 } from './types';
 
 enum SupportedExtensions {
@@ -19,7 +19,7 @@ enum SupportedExtensions {
 const renderFunctionFromFile = (
   config: Config,
   filePath: string
-): RenderingFunctions | UnsupportedFileTypeError => {
+): RenderingFunctions | PdfactoryError<ErrorType.UnsupportedFileTypeError> => {
   const parsedPath: ParsedPath = path.parse(filePath);
   const filename = parsedPath.name;
 
@@ -60,7 +60,7 @@ const renderFunctionFromFile = (
 const renderFunctionsFromDirectories = (
   config: Config,
   templatesDir: string[]
-): RenderingFunctions | UnsupportedFileTypeError => {
+): RenderingFunctions | PdfactoryError<ErrorType.UnsupportedFileTypeError> => {
   return templatesDir.reduce<RenderingFunctions>(
     (compileRenderingFunctions: RenderingFunctions, directory: string) => {
       let newTemplateFunctions: RenderingFunctions = {};
@@ -84,7 +84,7 @@ const renderFunctionsFromDirectories = (
 
 const compileRenderingFunctions = (
   config: Config
-): RenderingFunctions | UnsupportedFileTypeError => {
+): RenderingFunctions | PdfactoryError<ErrorType.UnsupportedFileTypeError> => {
   const { templatesDir } = config;
 
   const renderingFunctions = renderFunctionsFromDirectories(
@@ -101,10 +101,14 @@ export interface RenderedHtmlStrings {
   footerTemplate: string | undefined
 }
 
+export interface RenderingError {
+  error: PdfactoryError<ErrorType.DocumentNotFoundError | ErrorType.DocumentRenderingError> | undefined
+}
+
 const renderHtmlStrings = (
   renderingFunctions: RenderingFunctions,
   { document, data, header, footer }: PdfRequest
-): RenderedHtmlStrings | PdfactoryError => {
+): RenderedHtmlStrings | RenderingError => {
   let renderedHtml = '';
   let headerTemplate: string | undefined;
   let footerTemplate: string | undefined;
@@ -112,7 +116,7 @@ const renderHtmlStrings = (
   const renderFunction: ejs.TemplateFunction = renderingFunctions[document];
 
   if (!renderFunction) {
-    throw { type: 'DocumentNotFoundError', message: 'Document not found' };
+    throw { error: { type: ErrorType.DocumentNotFoundError, message: 'Document not found' } };
   }
 
   try {
@@ -126,10 +130,7 @@ const renderHtmlStrings = (
       footerTemplate = renderingFunctions[footer](data);
     }
   } catch (e) {
-    throw {
-      type: 'DocumentRenderingError',
-      message: 'Error rendering document'
-    };
+    throw { error: { type: ErrorType.DocumentRenderingError, message: 'Error rendering document' } };
   }
 
   return { renderedHtml, headerTemplate, footerTemplate };

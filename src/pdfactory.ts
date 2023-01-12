@@ -3,13 +3,14 @@ import { Browser } from 'puppeteer';
 import {
   compileRenderingFunctions,
   renderHtmlStrings,
-  RenderedHtmlStrings
+  RenderedHtmlStrings,
 } from './renderingFunctions';
 import {
   PdfRequest,
   Pdfactory,
   RenderingFunctions,
-  PdfactoryError
+  PdfactoryError,
+  ErrorType,
 } from './types';
 import { htmlStringsToPdf } from './htmlStringsToPdf';
 import { launchBrowser } from './browser';
@@ -33,20 +34,32 @@ const pdfactory: Pdfactory = async (
     process.exit(1);
   }
 
-  return async (pdfRequest: PdfRequest): Promise<Buffer | PdfactoryError> => {
-    const { renderedHtml, headerTemplate, footerTemplate } = renderHtmlStrings(
-      renderingFunctions,
-      pdfRequest
-    ) as RenderedHtmlStrings;
+  return async (
+    pdfRequest: PdfRequest
+  ): Promise<
+    | Buffer
+    | PdfactoryError<
+        ErrorType.DocumentNotFoundError | ErrorType.DocumentNotFoundError
+      >
+  > => {
+    try {
+      const { renderedHtml, headerTemplate, footerTemplate } =
+        renderHtmlStrings(
+          renderingFunctions,
+          pdfRequest
+        ) as RenderedHtmlStrings;
 
-    const pdf: Buffer = await htmlStringsToPdf(browser, renderedHtml, {
-      ...pdfOptions,
-      displayHeaderFooter: !!(headerTemplate || footerTemplate),
-      headerTemplate,
-      footerTemplate
-    });
+      const pdf: Buffer = await htmlStringsToPdf(browser, renderedHtml, {
+        ...pdfOptions,
+        displayHeaderFooter: !!(headerTemplate || footerTemplate),
+        headerTemplate,
+        footerTemplate,
+      });
 
-    return pdf;
+      return pdf;
+    } catch (e) {
+      throw e;
+    }
   };
 };
 
