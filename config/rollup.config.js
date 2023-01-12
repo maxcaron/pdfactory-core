@@ -70,7 +70,7 @@ export default defineConfig([
       typescript({
         tsconfig: path.join(
           dirname,
-          `./tsconfig-${devMode ? "dev" : "production"}.json`
+          `../tsconfig.json`
         ),
       }),
       nodeResolve(),

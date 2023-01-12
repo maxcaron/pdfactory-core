@@ -1,16 +1,16 @@
 {
   "include": [
-    "../src/**/*",
-    "../src/types.ts"
+    "./src/**/*",
+    "./src/types.ts"
   ],
   "exclude": [
-    "../node_modules",
-    "../dist/**/*",
-    "../build/**/*"
+    "./node_modules",
+    "./dist/**/*",
+    "./build/**/*"
   ],
   "compilerOptions": {
-    "rootDir": "../src",
-    "outDir": "../build",
+    "rootDir": "./src",
+    "outDir": "./build",
 
     "target": "ESNext",
     "module": "ESNext",

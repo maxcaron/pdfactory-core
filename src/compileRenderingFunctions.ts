@@ -127,7 +127,7 @@ const renderHtmlStrings = (
     }
   } catch (e) {
     throw {
-      type: "ErrorRenderingDocumentError",
+      type: "DocumentRenderingError",
       message: "Error rendering document",
     };
   }

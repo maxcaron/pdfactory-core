@@ -1,16 +1,16 @@
 {
   "include": [
-    "../src/pdfactory.ts",
-    "../src/types.ts"
+    "./src/pdfactory.ts",
+    "./src/types.ts"
   ],
   "exclude": [
-    "../node_modules/**/*",
-    "../dist/**/*",
-    "../build/**/*"
+    "./node_modules/**/*",
+    "./dist/**/*",
+    "./build/**/*"
   ],
   "compilerOptions": {
-    "rootDir": "../src",
-    "outDir": "../dist",
+    "rootDir": "./src",
+    "outDir": "./dist",
 
     "target": "ESNext",
     "module": "ESNext",
