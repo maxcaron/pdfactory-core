@@ -22,7 +22,7 @@ build
 *.sln
 *.sw?
 
-test/loadTest/results/**/*
+tests/loadTest/results/**/*
 dist
 
 TODO.md

@@ -15,6 +15,7 @@ import {
 import { htmlStringsToPdf } from './htmlStringsToPdf';
 import { launchBrowser } from './browser';
 import { DEFAULT_EJS_CONFIG, DEFAULT_PDF_OPTIONS } from './constants';
+import { logger } from './logger.js';
 
 let browser: Browser;
 let renderingFunctions: RenderingFunctions;
@@ -29,6 +30,7 @@ const pdfactory: Pdfactory = async (
     renderingFunctions = compileRenderingFunctions(
       config
     ) as RenderingFunctions;
+    logger.debug(renderingFunctions);
   } catch (e) {
     console.log(e);
     process.exit(1);

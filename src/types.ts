@@ -28,7 +28,7 @@ export type Pdfactory = (
 
 export interface Config {
   templatesDir: string[]
-  ejsOptions: ejs.Options
+  ejsOptions: ejs.Options,
 }
 
 export interface PdfRequest {
