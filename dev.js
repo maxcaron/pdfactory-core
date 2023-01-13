@@ -1,12 +1,12 @@
 import express from 'express'
-import { pdfactory } from '../build/bundle.js'
+import { pdfactory } from './build/bundle.js'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import monitor from 'express-status-monitor'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
-const templatesDir = path.join(dirname, '..', 'src', 'templates')
-const headersDir = path.join(dirname, '..', 'src', 'templates', 'headers')
+const templatesDir = path.join(dirname, '.', 'src', 'templates')
+const headersDir = path.join(dirname, '.', 'src', 'templates', 'headers')
 
 const DEFAULT_CONFIG = {
   templatesDir: [templatesDir, headersDir],

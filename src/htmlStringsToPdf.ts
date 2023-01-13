@@ -3,7 +3,7 @@ import { Browser, PDFOptions } from 'puppeteer';
 const LastConnection500ms = 'networkidle0';
 
 export const htmlStringsToPdf = async (
-  browser: Browser,
+  browser: Pick<Browser, 'newPage'>,
   renderedHtml: string,
   pdfOptions: PDFOptions
 ): Promise<Buffer> => {

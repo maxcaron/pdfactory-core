@@ -1,5 +1,5 @@
 {
-  "include": ["./**/*.ts", "./src/types.ts"],
+  "include": ["./**/*.ts", "./src/types.ts", "ava.config.js"],
   "exclude": ["./node_modules", "./dist/**/*", "./build/**/*", "./test"],
   "compilerOptions": {
     "rootDir": "./src",
