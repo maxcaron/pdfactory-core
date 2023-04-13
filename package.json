@@ -1,7 +1,7 @@
 {
   "author": "pdfactory-core",
   "name": "pdfactory-core",
-  "version": "0.0.35",
+  "version": "0.0.37",
   "type": "module",
   "files": [
     "dist/pdfactory.d.ts",
@@ -58,9 +58,6 @@
     "@types/ejs": "^3.1.1",
     "ejs": "^3.1.8",
     "puppeteer": "19.4.1"
-  },
-  "engines": {
-    "node": ">=16.0.0 <17"
   },
   "repository": {
     "type": "git",
