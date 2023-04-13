@@ -17,7 +17,8 @@ export interface PdfactoryError<ErrorType> {
 }
 
 export type Pdfactory = (
-  additionalConfig: Config,
+  config: PdfactoryConfig,
+  additionalConfig: EjsConfig,
   pdfOptions: PDFOptions
 ) => Promise<
   ({
@@ -26,7 +27,11 @@ export type Pdfactory = (
   }: PdfRequest) => Promise<Buffer | PdfactoryError<ErrorType.DocumentNotFoundError | ErrorType.DocumentRenderingError>>
 > | PdfactoryError<ErrorType.UnsupportedFileTypeError>
 
-export interface Config {
+export interface PdfactoryConfig {
+  useFileSystem: boolean
+}
+
+export interface EjsConfig {
   templatesDir: string[]
   ejsOptions: ejs.Options,
 }
@@ -36,6 +41,7 @@ export interface PdfRequest {
   header?: string
   footer?: string
   data: object
+  useLocalFiles?: boolean
 }
 
 export type RenderingFunctions = Record<string, ejs.TemplateFunction>

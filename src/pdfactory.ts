@@ -14,26 +14,29 @@ import {
 } from './types';
 import { htmlStringsToPdf } from './htmlStringsToPdf';
 import { launchBrowser } from './browser';
-import { DEFAULT_EJS_CONFIG, DEFAULT_PDF_OPTIONS } from './constants';
+import { DEFAULT_EJS_CONFIG, DEFAULT_PDF_OPTIONS, CUSTOM_PDF_OPTIONS, DEFAULT_PDFACTORY_CONFIG } from './constants';
 import { logger } from './logger.js';
 
 let browser: Browser;
 let renderingFunctions: RenderingFunctions;
 
 const pdfactory: Pdfactory = async (
-  config = DEFAULT_EJS_CONFIG,
-  pdfOptions = DEFAULT_PDF_OPTIONS
+  config= DEFAULT_PDFACTORY_CONFIG,
+  ejsConfig = DEFAULT_EJS_CONFIG,
+  pdfOptions = DEFAULT_PDF_OPTIONS,
 ) => {
   browser = await launchBrowser();
 
-  try {
-    renderingFunctions = compileRenderingFunctions(
-      config
-    ) as RenderingFunctions;
-    logger.debug(renderingFunctions);
-  } catch (e) {
-    console.log(e);
-    process.exit(1);
+  if(config.useFileSystem){
+    try {
+      renderingFunctions = compileRenderingFunctions(
+        ejsConfig
+      ) as RenderingFunctions;
+      logger.debug(renderingFunctions);
+    } catch (e) {
+      console.log(e);
+      process.exit(1);
+    }
   }
 
   return async (
@@ -45,20 +48,26 @@ const pdfactory: Pdfactory = async (
       >
   > => {
     try {
-      const { renderedHtml, headerTemplate, footerTemplate } =
+      if (!config.useFileSystem) {
+        const pdf: Buffer = await htmlStringsToPdf(browser, pdfRequest.document, CUSTOM_PDF_OPTIONS);
+
+        return pdf; 
+      } else {
+        const { renderedHtml, headerTemplate, footerTemplate } =
         renderHtmlStrings(
           renderingFunctions,
           pdfRequest
         ) as RenderedHtmlStrings;
 
-      const pdf: Buffer = await htmlStringsToPdf(browser, renderedHtml, {
-        ...pdfOptions,
-        displayHeaderFooter: !!(headerTemplate || footerTemplate),
-        headerTemplate,
-        footerTemplate,
-      });
+        const pdf: Buffer = await htmlStringsToPdf(browser, renderedHtml, {
+          ...pdfOptions,
+          displayHeaderFooter: !!(headerTemplate || footerTemplate),
+          headerTemplate,
+          footerTemplate,
+        });
 
-      return pdf;
+        return pdf;
+      }
     } catch (e) {
       return Promise.reject(e);
     }

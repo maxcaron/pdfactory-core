@@ -5,7 +5,7 @@ import { readFile } from './utils';
 
 import {
   RenderingFunctions,
-  Config,
+  EjsConfig,
   PdfactoryError,
   PdfRequest,
   ErrorType
@@ -17,7 +17,7 @@ enum SupportedExtensions {
 }
 
 const renderFunctionFromFile = (
-  config: Config,
+  config: EjsConfig,
   filePath: string
 ): RenderingFunctions | PdfactoryError<ErrorType.UnsupportedFileTypeError> => {
   const parsedPath: ParsedPath = path.parse(filePath);
@@ -58,7 +58,7 @@ const renderFunctionFromFile = (
 };
 
 const renderFunctionsFromDirectories = (
-  config: Config,
+  config: EjsConfig,
   templatesDir: string[]
 ): RenderingFunctions | PdfactoryError<ErrorType.UnsupportedFileTypeError> => {
   return templatesDir.reduce<RenderingFunctions>(
@@ -83,7 +83,7 @@ const renderFunctionsFromDirectories = (
 };
 
 const compileRenderingFunctions = (
-  config: Config
+  config: EjsConfig
 ): RenderingFunctions | PdfactoryError<ErrorType.UnsupportedFileTypeError> => {
   const { templatesDir } = config;
 
