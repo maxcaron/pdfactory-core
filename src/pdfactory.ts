@@ -11,6 +11,7 @@ import {
   RenderingFunctions,
   PdfactoryError,
   ErrorType,
+  PdfactoryInitializationParams
 } from './types';
 import { htmlStringsToPdf } from './htmlStringsToPdf';
 import { launchBrowser } from './browser';
@@ -20,11 +21,9 @@ import { logger } from './logger.js';
 let browser: Browser;
 let renderingFunctions: RenderingFunctions;
 
-const pdfactory: Pdfactory = async (
-  config= DEFAULT_PDFACTORY_CONFIG,
-  ejsConfig = DEFAULT_EJS_CONFIG,
-  pdfOptions = DEFAULT_PDF_OPTIONS,
-) => {
+const pdfactory: Pdfactory = async (params: PdfactoryInitializationParams) => {
+  const { config = DEFAULT_PDFACTORY_CONFIG, ejsConfig = DEFAULT_EJS_CONFIG, pdfOptions = DEFAULT_PDF_OPTIONS } = params;
+  
   browser = await launchBrowser();
 
   if(config.useFileSystem){
