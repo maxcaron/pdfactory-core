@@ -1,6 +1,6 @@
 import { Options } from 'ejs';
 import { PDFOptions } from 'puppeteer';
-import { EjsConfig, PdfactoryConfig } from './types';
+import { EjsConfig, PdfactoryConfig } from './types.ts';
 
 export const DEFAULT_EJS_OPTIONS: Options = {
   root: 'src',

@@ -5,7 +5,7 @@ import {
   renderHtmlStrings,
   RenderedHtmlStrings,
   renderHtmlStringsFromRequest
-} from './renderingFunctions';
+} from './renderingFunctions.ts';
 import {
   PdfRequest,
   Pdfactory,
@@ -13,11 +13,11 @@ import {
   PdfactoryError,
   ErrorType,
   PdfactoryInitializationParams
-} from './types';
-import { htmlStringsToPdf } from './htmlStringsToPdf';
-import { launchBrowser } from './browser';
-import { DEFAULT_EJS_CONFIG, DEFAULT_PDF_OPTIONS, CUSTOM_PDF_OPTIONS, DEFAULT_PDFACTORY_CONFIG } from './constants';
-import { logger } from './logger.js';
+} from './types.ts';
+import { htmlStringsToPdf } from './htmlStringsToPdf.ts';
+import { launchBrowser } from './browser.ts';
+import { DEFAULT_EJS_CONFIG, DEFAULT_PDF_OPTIONS, CUSTOM_PDF_OPTIONS, DEFAULT_PDFACTORY_CONFIG } from './constants.ts';
+import { logger } from './logger.ts';
 
 let browser: Browser;
 let renderingFunctions: RenderingFunctions;

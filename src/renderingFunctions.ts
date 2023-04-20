@@ -1,7 +1,7 @@
 import fs from 'fs';
 import ejs from 'ejs';
 import path, { ParsedPath } from 'path';
-import { readFile } from './utils';
+import { readFile } from './utils.ts';
 
 import {
   RenderingFunctions,
@@ -9,7 +9,7 @@ import {
   PdfactoryError,
   PdfRequest,
   ErrorType
-} from './types';
+} from './types.ts';
 
 enum SupportedExtensions {
   ejs = '.ejs',
