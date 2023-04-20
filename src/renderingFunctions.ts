@@ -95,6 +95,26 @@ const compileRenderingFunctions = (
   return renderingFunctions;
 };
 
+const renderHtmlStringsFromRequest = (
+  config: EjsConfig,
+  { document, header, footer }: PdfRequest
+): RenderingFunctions | PdfactoryError<ErrorType.UnsupportedFileTypeError> => {
+  console.log(document, header, footer);
+  
+  try {
+    return {
+      document: ejs.render(document, {}),
+      header: ejs.render(header, {}),
+      footer: ejs.render(footer, {}),
+    }; 
+  } catch (e) {
+    console.log(e);
+    
+  }
+};
+
+  
+
 export interface RenderedHtmlStrings {
   renderedHtml: string
   headerTemplate: string | undefined
@@ -136,4 +156,4 @@ const renderHtmlStrings = (
   return { renderedHtml, headerTemplate, footerTemplate };
 };
 
-export { compileRenderingFunctions, renderHtmlStrings };
+export { compileRenderingFunctions, renderHtmlStrings, renderHtmlStringsFromRequest };

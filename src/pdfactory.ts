@@ -4,6 +4,7 @@ import {
   compileRenderingFunctions,
   renderHtmlStrings,
   RenderedHtmlStrings,
+  renderHtmlStringsFromRequest
 } from './renderingFunctions';
 import {
   PdfRequest,
@@ -23,7 +24,7 @@ let renderingFunctions: RenderingFunctions;
 
 const pdfactory: Pdfactory = async (params: PdfactoryInitializationParams) => {
   const { config = DEFAULT_PDFACTORY_CONFIG, ejsConfig = DEFAULT_EJS_CONFIG, pdfOptions = DEFAULT_PDF_OPTIONS } = params;
-  
+
   browser = await launchBrowser();
 
   if(config.useFileSystem){
@@ -48,9 +49,16 @@ const pdfactory: Pdfactory = async (params: PdfactoryInitializationParams) => {
   > => {
     try {
       if (!config.useFileSystem) {
-        const pdf: Buffer = await htmlStringsToPdf(browser, pdfRequest.document, CUSTOM_PDF_OPTIONS);
+        const {document, header, footer} = renderHtmlStringsFromRequest(ejsConfig, pdfRequest);
 
-        return pdf; 
+        const pdf: Buffer = await htmlStringsToPdf(browser, document, {
+          ...pdfOptions,
+          displayHeaderFooter: !!(header || footer),
+          headerTemplate: header,
+          footerTemplate: footer,
+        });
+
+        return pdf;
       } else {
         const { renderedHtml, headerTemplate, footerTemplate } =
         renderHtmlStrings(

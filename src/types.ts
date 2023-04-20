@@ -45,7 +45,6 @@ export interface PdfRequest {
   header?: string
   footer?: string
   data: object
-  useLocalFiles?: boolean
 }
 
 export type RenderingFunctions = Record<string, ejs.TemplateFunction>
