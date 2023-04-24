@@ -33,7 +33,7 @@ const pdfactory: Pdfactory = async (params: PdfactoryInitializationParams) => {
     pdfOptions = DEFAULT_PDF_OPTIONS,
   } = params;
 
-  browser = await launchBrowser();
+  browser = await launchBrowser(config);
 
   if (config.useFileSystem) {
     try {
@@ -81,7 +81,8 @@ const pdfactory: Pdfactory = async (params: PdfactoryInitializationParams) => {
             headerTemplate: header,
             footerTemplate: footer,
           }, 
-          pdfRequest.css?.join(' ') ?? '',
+          pdfRequest.css?.join('\n') ?? '',
+          config
         );
 
         return pdf;

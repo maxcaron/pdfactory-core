@@ -17,7 +17,8 @@ export interface PdfactoryError<ErrorType> {
 }
 
 export interface PdfactoryConfig {
-  useFileSystem: boolean
+  useFileSystem: boolean,
+  debug: boolean
 }
 
 export interface EjsConfig {

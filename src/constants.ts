@@ -34,5 +34,6 @@ export const CUSTOM_PDF_OPTIONS: PDFOptions = {
 };
 
 export const DEFAULT_PDFACTORY_CONFIG: PdfactoryConfig = {
-  useFileSystem: true
+  useFileSystem: true,
+  debug: false
 };
