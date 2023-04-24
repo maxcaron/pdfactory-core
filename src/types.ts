@@ -45,6 +45,9 @@ export interface PdfRequest {
   header?: string
   footer?: string
   data: object
+  marginTop?: string
+  marginBottom?: string
+  css?: string[]
 }
 
 export type RenderingFunctions = Record<string, ejs.TemplateFunction>

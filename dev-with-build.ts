@@ -37,9 +37,6 @@ const init = async () => {
     received = received + 1;
 
     try {
-      console.log('Received request');
-      console.log(req.body);
-      
       pdf = await pdfactoryHandler(req.body);
     } catch (e) {
       res.status(400).send(e);

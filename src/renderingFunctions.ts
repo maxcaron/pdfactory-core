@@ -96,20 +96,25 @@ const compileRenderingFunctions = (
 };
 
 const renderHtmlStringsFromRequest = (
-  config: EjsConfig,
-  { document, header, footer }: PdfRequest
-): RenderingFunctions | PdfactoryError<ErrorType.UnsupportedFileTypeError> => {
-  console.log(document, header, footer);
+  request: PdfRequest
+): {document: string, header: string, footer: string, err: boolean | null} => {
+  const { document, header, footer } = request;
   
   try {
     return {
       document: ejs.render(document, {}),
-      header: ejs.render(header, {}),
-      footer: ejs.render(footer, {}),
+      header: header ? ejs.render(header, {}) : '',
+      footer: footer ? ejs.render(footer, {}) : '',
+      err: null
     }; 
   } catch (e) {
     console.log(e);
-    
+    return {
+      document: '',
+      header: '',
+      footer: '',
+      err: null
+    }; 
   }
 };
 

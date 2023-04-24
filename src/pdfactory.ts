@@ -4,7 +4,7 @@ import {
   compileRenderingFunctions,
   renderHtmlStrings,
   RenderedHtmlStrings,
-  renderHtmlStringsFromRequest
+  renderHtmlStringsFromRequest,
 } from './renderingFunctions.ts';
 import {
   PdfRequest,
@@ -12,22 +12,30 @@ import {
   RenderingFunctions,
   PdfactoryError,
   ErrorType,
-  PdfactoryInitializationParams
+  PdfactoryInitializationParams,
 } from './types.ts';
 import { htmlStringsToPdf } from './htmlStringsToPdf.ts';
 import { launchBrowser } from './browser.ts';
-import { DEFAULT_EJS_CONFIG, DEFAULT_PDF_OPTIONS, CUSTOM_PDF_OPTIONS, DEFAULT_PDFACTORY_CONFIG } from './constants.ts';
+import {
+  DEFAULT_EJS_CONFIG,
+  DEFAULT_PDF_OPTIONS,
+  DEFAULT_PDFACTORY_CONFIG,
+} from './constants.ts';
 import { logger } from './logger.ts';
 
 let browser: Browser;
 let renderingFunctions: RenderingFunctions;
 
 const pdfactory: Pdfactory = async (params: PdfactoryInitializationParams) => {
-  const { config = DEFAULT_PDFACTORY_CONFIG, ejsConfig = DEFAULT_EJS_CONFIG, pdfOptions = DEFAULT_PDF_OPTIONS } = params;
+  const {
+    config = DEFAULT_PDFACTORY_CONFIG,
+    ejsConfig = DEFAULT_EJS_CONFIG,
+    pdfOptions = DEFAULT_PDF_OPTIONS,
+  } = params;
 
   browser = await launchBrowser();
 
-  if(config.useFileSystem){
+  if (config.useFileSystem) {
     try {
       renderingFunctions = compileRenderingFunctions(
         ejsConfig
@@ -49,29 +57,47 @@ const pdfactory: Pdfactory = async (params: PdfactoryInitializationParams) => {
   > => {
     try {
       if (!config.useFileSystem) {
-        const {document, header, footer} = renderHtmlStringsFromRequest(ejsConfig, pdfRequest);
+        const marginTop = pdfRequest.marginTop || pdfOptions.margin.top;
+        const marginBottom =
+          pdfRequest.marginBottom || pdfOptions.margin.bottom;
 
-        const pdf: Buffer = await htmlStringsToPdf(browser, document, {
-          ...pdfOptions,
-          displayHeaderFooter: !!(header || footer),
-          headerTemplate: header,
-          footerTemplate: footer,
-        });
+        const { document, header, footer, err } = renderHtmlStringsFromRequest(
+          pdfRequest
+        );
+
+        if (err !== null) {
+          return Promise.reject(err);
+        }
+
+        const pdf: Buffer = await htmlStringsToPdf(
+          browser, 
+          document, 
+          {
+            ...{
+              ...pdfOptions,
+              margin: { top: marginTop, bottom: marginBottom },
+            },
+            displayHeaderFooter: !!(header || footer),
+            headerTemplate: header,
+            footerTemplate: footer,
+          }, 
+          pdfRequest.css?.join(' ') ?? '',
+        );
 
         return pdf;
       } else {
         const { renderedHtml, headerTemplate, footerTemplate } =
-        renderHtmlStrings(
-          renderingFunctions,
-          pdfRequest
-        ) as RenderedHtmlStrings;
+          renderHtmlStrings(
+            renderingFunctions,
+            pdfRequest
+          ) as RenderedHtmlStrings;
 
         const pdf: Buffer = await htmlStringsToPdf(browser, renderedHtml, {
           ...pdfOptions,
           displayHeaderFooter: !!(headerTemplate || footerTemplate),
           headerTemplate,
           footerTemplate,
-        });
+        }, '');
 
         return pdf;
       }
