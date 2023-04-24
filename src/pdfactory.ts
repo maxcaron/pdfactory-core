@@ -81,7 +81,7 @@ const pdfactory: Pdfactory = async (params: PdfactoryInitializationParams) => {
             headerTemplate: header,
             footerTemplate: footer,
           }, 
-          pdfRequest.css?.join(' ') ?? '',
+          pdfRequest.css?.join('\n') ?? '',
         );
 
         return pdf;

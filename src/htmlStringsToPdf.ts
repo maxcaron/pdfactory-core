@@ -26,13 +26,11 @@ export const htmlStringsToPdf = async (
       </body>
   </html>`;
 
-  console.log(wrapper);
-  
   await page.setContent(wrapper, { waitUntil: LastConnection500ms });
 
   const pdf: Buffer = await page.pdf(pdfOptions);
 
-  await page.close();
+  process.env.DEBUG !== 'true' && await page.close();
 
   return pdf;
 };
