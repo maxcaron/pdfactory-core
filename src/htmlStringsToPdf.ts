@@ -1,4 +1,5 @@
 import { Browser, PDFOptions } from 'puppeteer';
+import { PdfactoryConfig } from './types.ts';
 
 const LastConnection500ms = 'networkidle0';
 
@@ -6,7 +7,8 @@ export const htmlStringsToPdf = async (
   browser: Pick<Browser, 'newPage'>,
   renderedHtml: string,
   pdfOptions: PDFOptions,
-  css: string
+  css: string,
+  config: PdfactoryConfig
 ): Promise<Buffer> => {
   const page = await browser.newPage();
   const wrapper = `<!DOCTYPE html>
@@ -30,7 +32,7 @@ export const htmlStringsToPdf = async (
 
   const pdf: Buffer = await page.pdf(pdfOptions);
 
-  process.env.DEBUG !== 'true' && await page.close();
+  !config.debug && await page.close();
 
   return pdf;
 };
