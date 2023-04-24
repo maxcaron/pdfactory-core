@@ -1,7 +1,7 @@
 {
   "author": "pdfactory-core",
   "name": "pdfactory-core",
-  "version": "0.0.34",
+  "version": "0.0.41",
   "type": "module",
   "files": [
     "dist/pdfactory.d.ts",
@@ -19,18 +19,26 @@
   },
   "scripts": {
     "dist": "rimraf ./dist && npx rollup --config ./config/rollup.config.js",
-    "dev": "DEV=true concurrently \"yarn dev:build\" \"wait-on ./build/bundle.js && nodemon --inspect --watch test --watch build ./test/dev.js\"",
-    "dev:build": "rimraf ./build/**/* && npx rollup -w -c ./config/rollup.config.js",
-    "test:build": "node ./test/testBuild.js",
-    "lint:fix": "eslint --fix src"
+    "dev": "yarn dev:ts",
+    "dev:build": "DEV=true concurrently \"yarn dev:build\" \"wait-on ./build/bundle.js && yarn dev:ts\"",
+    "dev:ts": "DEV=true nodemon --exec ts-node --project ./tsconfig.dev.json ./dev.ts",
+    "build": "rimraf ./build/**/* && npx rollup -w -c ./config/rollup.config.js",
+    "test:build": "node ./tests/testBuild.js",
+    "lint:fix": "eslint --fix src",
+    "test": "DEV=true ava --watch"
   },
   "devDependencies": {
+    "@ava/typescript": "^3.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-replace": "^5.0.2",
     "@rollup/plugin-terser": "^0.2.1",
     "@rollup/plugin-typescript": "^11.0.0",
     "@types/express": "^4.17.14",
+    "@types/express-status-monitor": "^1.3.0",
     "@types/node": "^18.7.18",
+    "@types/sinon": "^10.0.13",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "ava": "^5.1.0",
     "concurrently": "^7.6.0",
     "dotenv": "^16.0.3",
     "eslint": "^8.0.1",
@@ -44,6 +52,8 @@
     "rimraf": "^3.0.2",
     "rollup": "^3.1.0",
     "rollup-plugin-delete": "^2.0.0",
+    "sinon": "^15.0.1",
+    "ts-node": "^10.9.1",
     "typescript": "*",
     "wait-on": "^7.0.1"
   },
@@ -51,9 +61,6 @@
     "@types/ejs": "^3.1.1",
     "ejs": "^3.1.8",
     "puppeteer": "19.4.1"
-  },
-  "engines": {
-    "node": ">=16.0.0 <17"
   },
   "repository": {
     "type": "git",

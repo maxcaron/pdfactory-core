@@ -1,15 +1,15 @@
 import fs from 'fs';
 import ejs from 'ejs';
 import path, { ParsedPath } from 'path';
-import { readFile } from './utils';
+import { readFile } from './utils.ts';
 
 import {
   RenderingFunctions,
-  Config,
+  EjsConfig,
   PdfactoryError,
   PdfRequest,
   ErrorType
-} from './types';
+} from './types.ts';
 
 enum SupportedExtensions {
   ejs = '.ejs',
@@ -17,7 +17,7 @@ enum SupportedExtensions {
 }
 
 const renderFunctionFromFile = (
-  config: Config,
+  config: EjsConfig,
   filePath: string
 ): RenderingFunctions | PdfactoryError<ErrorType.UnsupportedFileTypeError> => {
   const parsedPath: ParsedPath = path.parse(filePath);
@@ -58,7 +58,7 @@ const renderFunctionFromFile = (
 };
 
 const renderFunctionsFromDirectories = (
-  config: Config,
+  config: EjsConfig,
   templatesDir: string[]
 ): RenderingFunctions | PdfactoryError<ErrorType.UnsupportedFileTypeError> => {
   return templatesDir.reduce<RenderingFunctions>(
@@ -83,7 +83,7 @@ const renderFunctionsFromDirectories = (
 };
 
 const compileRenderingFunctions = (
-  config: Config
+  config: EjsConfig
 ): RenderingFunctions | PdfactoryError<ErrorType.UnsupportedFileTypeError> => {
   const { templatesDir } = config;
 
@@ -94,6 +94,31 @@ const compileRenderingFunctions = (
 
   return renderingFunctions;
 };
+
+const renderHtmlStringsFromRequest = (
+  request: PdfRequest
+): {document: string, header: string, footer: string, err: boolean | null} => {
+  const { document, header, footer } = request;
+  
+  try {
+    return {
+      document: ejs.render(document, {}),
+      header: header ? ejs.render(header, {}) : '',
+      footer: footer ? ejs.render(footer, {}) : '',
+      err: null
+    }; 
+  } catch (e) {
+    console.log(e);
+    return {
+      document: '',
+      header: '',
+      footer: '',
+      err: null
+    }; 
+  }
+};
+
+  
 
 export interface RenderedHtmlStrings {
   renderedHtml: string
@@ -136,4 +161,4 @@ const renderHtmlStrings = (
   return { renderedHtml, headerTemplate, footerTemplate };
 };
 
-export { compileRenderingFunctions, renderHtmlStrings };
+export { compileRenderingFunctions, renderHtmlStrings, renderHtmlStringsFromRequest };

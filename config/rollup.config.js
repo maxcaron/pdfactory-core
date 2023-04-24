@@ -4,6 +4,7 @@ import terser from '@rollup/plugin-terser';
 import del from 'rollup-plugin-delete';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { defineConfig } from 'rollup';
+import replace from '@rollup/plugin-replace';
 
 import dotenv from 'dotenv';
 dotenv.config({
@@ -41,6 +42,10 @@ export default defineConfig([
     ],
     external: Object.keys(pkg.dependencies),
     plugins: [
+      replace({
+        'process.env.NODE_ENV': process.env.NODE_ENV,
+        'process.env.DEBUG': process.env.DEBUG,
+      }),
       del({
         targets: [
           ...(!devMode ? ['dist/**/*'] : []),

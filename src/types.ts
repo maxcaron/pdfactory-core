@@ -16,26 +16,38 @@ export interface PdfactoryError<ErrorType> {
   message: string
 }
 
-export type Pdfactory = (
-  additionalConfig: Config,
-  pdfOptions: PDFOptions
-) => Promise<
+export interface PdfactoryConfig {
+  useFileSystem: boolean
+}
+
+export interface EjsConfig {
+  templatesDir: string[]
+  ejsOptions: ejs.Options,
+}
+
+export type PdfactoryInitializationParams = {
+  config?: PdfactoryConfig,
+  ejsConfig?: EjsConfig,
+  pdfOptions?: PDFOptions
+}
+
+export type Pdfactory = (params: PdfactoryInitializationParams) => Promise<
   ({
     document,
     data
   }: PdfRequest) => Promise<Buffer | PdfactoryError<ErrorType.DocumentNotFoundError | ErrorType.DocumentRenderingError>>
 > | PdfactoryError<ErrorType.UnsupportedFileTypeError>
 
-export interface Config {
-  templatesDir: string[]
-  ejsOptions: ejs.Options
-}
+
 
 export interface PdfRequest {
   document: string
   header?: string
   footer?: string
   data: object
+  marginTop?: string
+  marginBottom?: string
+  css?: string[]
 }
 
 export type RenderingFunctions = Record<string, ejs.TemplateFunction>
