@@ -30,3 +30,5 @@ TODO.md
 .local-chromium
 .vscode
 package-lock.json
+
+/tmp

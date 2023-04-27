@@ -1,8 +1,6 @@
 import { Browser, PDFOptions } from 'puppeteer';
 import { PdfactoryConfig } from './types.ts';
 
-const LastConnection500ms = 'networkidle0';
-
 export const htmlStringsToPdf = async (
   browser: Pick<Browser, 'newPage'>,
   renderedHtml: string,
@@ -11,6 +9,12 @@ export const htmlStringsToPdf = async (
   config: PdfactoryConfig
 ): Promise<Buffer> => {
   const page = await browser.newPage();
+
+  await page.setRequestInterception(true);
+  page.on('request', (request) => {
+    request.abort();
+  });
+
   const wrapper = `<!DOCTYPE html>
   <html>
       <head>
@@ -28,7 +32,7 @@ export const htmlStringsToPdf = async (
       </body>
   </html>`;
 
-  await page.setContent(wrapper, { waitUntil: LastConnection500ms });
+  await page.setContent(wrapper, { waitUntil: 'domcontentloaded' });
 
   const pdf: Buffer = await page.pdf(pdfOptions);
 
